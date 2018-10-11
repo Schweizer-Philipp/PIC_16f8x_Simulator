@@ -1,0 +1,36 @@
+package model;
+
+public class CommandLineModel {
+
+	int commandAdress;
+	CommandCode commandCode;
+	int commandArg;
+	int line;
+	String label;
+	
+	public CommandLineModel(int commandAdress, CommandCode commandCode, int commandArg, int line, String label) {
+		this.commandAdress = commandAdress;
+		this.commandCode = commandCode;
+		this.commandArg = commandArg;
+		this.line = line;
+		this.label = label;
+	}
+
+	public int getCommandAdress() {return commandAdress;}
+
+	public CommandCode getCommandCode() {return commandCode;}
+
+	public int getCommandArg() {return commandArg;}
+
+	public int getLine() {return line;}
+
+	public String getLabel() {return label;}
+	
+	
+	
+	
+	
+	
+	
+	
+}
