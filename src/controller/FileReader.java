@@ -18,7 +18,8 @@ public class FileReader {
     public void readLine() throws IOException {
         while ((line = bufferedReader.readLine()) != null) {
             if (line.charAt(0) != ' ') {
-                //TODO call CommandParser
+
+                System.out.println(CommandParser.commandParser(line));
             }
         }
         bufferedReader.close();

@@ -16,6 +16,17 @@ public class CommandLineModel {
 		this.label = label;
 	}
 
+	@Override
+	public String toString() {
+		return "CommandLineModel{" +
+				"commandAdress=" + commandAdress +
+				", commandCode=" + commandCode +
+				", commandArg=" + commandArg +
+				", line=" + line +
+				", label='" + label + '\'' +
+				'}';
+	}
+
 	public int getCommandAdress() {return commandAdress;}
 
 	public CommandCode getCommandCode() {return commandCode;}
