@@ -21,12 +21,12 @@
                     00021           ;Festlegen des Codebeginns
                     00022           org 0
                     00023  start    
-0000 3011           00024           movlw 11h           ;in W steht nun 11h, Statusreg. unverändert
-0001 3930           00025           andlw 30h           ;W = 10h, C=x, DC=x, Z=0
-0002 380D           00026           iorlw 0Dh           ;W = 1Dh, C=x, DC=x, Z=0
-0003 3C3D           00027           sublw 3Dh           ;W = 20h, C=1, DC=1, Z=0
-0004 3A20           00028           xorlw 20h           ;W = 00h, C=1, DC=1, Z=1
-0005 3E25           00029           addlw 25h           ;W = 25h, C=0, DC=0, Z=0
+0000 3011           00024           movlw 11h          ;in W steht nun 11h(17), Statusreg. unverändert
+0001 3930           00025           andlw 30h           ;W = 10h(16), C=x, DC=x, Z=0
+0002 380D           00026           iorlw 0Dh           ;W = 1Dh(29), C=x, DC=x, Z=0
+0003 3C3D           00027           sublw 3Dh           ;W = 20h(32), C=1, DC=1, Z=0
+0004 3A20           00028           xorlw 20h           ;W = 00h(0), C=1, DC=1, Z=1
+0005 3E25           00029           addlw 25h           ;W = 25h(37), C=0, DC=0, Z=0
                     00030             
                     00031           
                     00032  ende     

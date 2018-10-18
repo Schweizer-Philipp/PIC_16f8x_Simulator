@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 
 import model.CommandCode;
 import model.CommandLineModel;
-import org.jetbrains.annotations.Nullable;
 
 public class CommandParser {
 

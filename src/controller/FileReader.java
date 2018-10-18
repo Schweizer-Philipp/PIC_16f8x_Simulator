@@ -15,11 +15,11 @@ public class FileReader {
         bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
     }
 
-    public void readLine() throws IOException {
+    public void readLine(MicroController m) throws IOException {
         while ((line = bufferedReader.readLine()) != null) {
             if (line.charAt(0) != ' ') {
 
-                System.out.println(CommandParser.commandParser(line));
+                m.getCommands().add(CommandParser.commandParser(line));
             }
         }
         bufferedReader.close();
