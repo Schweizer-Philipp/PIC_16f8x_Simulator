@@ -19,7 +19,7 @@ public enum CommandCode {
 	NOP(0x0000),
 	RLF(0x0D00),
 	RRF(0x0C00),
-	SUBWF(0x02000),
+	SUBWF(0x0200),
 	SWAPF(0x0E00),
 	XORWF(0x0600),
 	BCF(0x1000),

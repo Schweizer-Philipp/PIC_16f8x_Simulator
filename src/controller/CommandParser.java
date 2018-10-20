@@ -1,4 +1,5 @@
 package controller;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentMap;
@@ -12,43 +13,41 @@ public class CommandParser {
 
 
     public static CommandLineModel commandParser(String line) {
-		
-		String[] splitetLine = line.split(" ");
 
-		splitetLine = Stream.of(splitetLine).filter(s -> !s.equals("")).toArray(String[]::new);
+        String[] splittedLine = line.split(" ");
 
-        splitetLine = buildComment(splitetLine);
+        splittedLine = Stream.of(splittedLine).filter(s -> !s.isEmpty()).toArray(String[]::new);
+        splittedLine = buildComment(splittedLine);
 
-		int commandAdress = Integer.valueOf(splitetLine[0]);
+        int commandAddress = Integer.valueOf(splittedLine[0]);
+        int lineNumber = Integer.valueOf(splittedLine[2]);
 
-		int lineNumber = Integer.valueOf(splitetLine[2]);
+        int[] commandCodeData = getCommandCodeData(Integer.decode("0x" + splittedLine[1]));
 
-        int[] commandCodeData = getCommandCodeData(Integer.decode("0x"+splitetLine[1]));
+        CommandCode commandCode = CommandCode.getCommandCodesByValue(commandCodeData[0]);
 
-        CommandCode comandCode = CommandCode.getCommandCodesByValue(commandCodeData[0]);
+        int commandArg = getCommandArg(Integer.decode("0x" + splittedLine[1]), commandCodeData[1]);
 
-        int commandArg = getCommandArg(Integer.decode("0x"+splitetLine[1]),commandCodeData[1]);
+        String label = String.valueOf(splittedLine[3]);
 
-		String label = String.valueOf(splitetLine[3]);
-
-		return new CommandLineModel(commandAdress,comandCode,commandArg,lineNumber,label);
-	}
+        return new CommandLineModel(commandAddress, commandCode, commandArg, lineNumber, label);
+    }
 
     private static int getCommandArg(int number, int mask) {
 
-        return number&mask;
+        return number & mask;
     }
 
     private static int[] getCommandCodeData(int number) {
 
         int[] commandCodeData = new int[2];
-        int[] mask = {0xFFFF,0xFF80,0xFF00,0xFE00,0xFC00,0xF800};
+        int[] mask = {0xFFFF, 0xFF80, 0xFF00, 0xFE00, 0xFC00, 0xF800};
 
         for (int selectedMask : mask) {
 
-            if(CommandCode.DEFAULT!=CommandCode.getCommandCodesByValue(number&selectedMask)){
+            if (CommandCode.DEFAULT != CommandCode.getCommandCodesByValue(number & selectedMask)) {
 
-                commandCodeData[0] = number&selectedMask;
+                commandCodeData[0] = number & selectedMask;
                 commandCodeData[1] = ~selectedMask;
                 return commandCodeData;
             }
@@ -62,12 +61,10 @@ public class CommandParser {
 
     private static String[] buildComment(String[] splitetLine) {
 
-        String[] splitetString = Arrays.copyOfRange(splitetLine, 0, 4);
+        String[] splittedString = Arrays.copyOfRange(splitetLine, 0, 4);
+        splittedString[3] = String.join(" ", Arrays.copyOfRange(splitetLine, 3, splitetLine.length));
 
-        splitetString[3] = Arrays.stream(Arrays.copyOfRange(splitetLine, 3, splitetLine.length))
-                .collect(Collectors.joining(" "));
-
-        return splitetString;
+        return splittedString;
     }
 
 }

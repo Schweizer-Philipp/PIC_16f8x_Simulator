@@ -37,11 +37,4 @@ public class CommandLineModel {
 
 	public String getLabel() {return label;}
 	
-	
-	
-	
-	
-	
-	
-	
 }

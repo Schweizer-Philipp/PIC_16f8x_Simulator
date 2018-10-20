@@ -1,41 +1,49 @@
 package controller;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import model.MemoryBank;
 import model.CommandLineModel;
 
 import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.function.Predicate;
 
 public class MicroController {
 
 
-    int registerW;
+    private int registerW;
 
-    ArrayList<CommandLineModel> commands;
+    private static int FLAG_REGISTER_W = -1;
 
-    MemoryBank bankZero;
+    private ArrayList<CommandLineModel> commands;
 
-    MemoryBank bankOne;
+    private MemoryBank bankZero;
 
-    int PC = 0; // Programm counter
+    private MemoryBank bankOne;
+
+    private Deque<Integer> tos;
+
+    int programCounter = 0; // Programm Counter
 
 
-    public MicroController(){
+    public MicroController() {
 
         commands = new ArrayList<>();
 
-        bankZero = new MemoryBank();
+        bankZero = MemoryBank.getInstanceBankZero();
 
-        bankOne = new MemoryBank();
+        bankOne = MemoryBank.getInstanceBankOne();
+
+        tos = new LinkedList<>();
     }
 
-    public void executeCommand(CommandLineModel command){
+    public void executeCommand(CommandLineModel command) {
 
 
-        switch (command.getCommandCode()){
+        switch (command.getCommandCode()) {
 
-            case ADDWF :
+            case ADDWF:
 
                 //TODO
                 break;
@@ -97,7 +105,7 @@ public class MicroController {
 
             case NOP:
 
-                //TODO
+                programCounter++;
                 break;
 
             case RLF:
@@ -147,41 +155,21 @@ public class MicroController {
 
             case ADDLW:
 
-                if(checkOverflowBetweenBitFourAndFive(registerW,command.getCommandArg())){
-
-                    setBit(3,1,bankOne);
-                    setBit(3,1,bankZero);
-                }
-                else{
-
-                    unsetBit(3,1,bankOne);
-                    unsetBit(3,1,bankZero);
-                }
-                registerW = registerW + command.getCommandArg();
-                if(registerW>255){
-
-                    setBit(3,0,bankZero);
-                    setBit(3,0,bankOne);
-                }
-                else{
-
-                    unsetBit(3,0,bankOne);
-                    unsetBit(3,0,bankZero);
-                }
-                registerW = registerW & 0x000000FF;
-                PC++;
+                add(registerW, command.getCommandArg(), FLAG_REGISTER_W);
+                programCounter++;
                 break;
 
             case ANDLW:
 
                 registerW = registerW & command.getCommandArg();
                 checkZeroFlag(registerW);
-                PC++;
+                programCounter++;
                 break;
 
             case CALL:
 
-                //TODO
+                tos.push(programCounter+1);
+                programCounter = command.getCommandArg();
                 break;
 
             case CLRWDT:
@@ -191,21 +179,21 @@ public class MicroController {
 
             case GOTO:
 
-                PC = command.getCommandArg();
+                programCounter = command.getCommandArg();
                 break;
 
             case IORLW:
 
                 registerW = registerW | command.getCommandArg();
                 checkZeroFlag(registerW);
-                PC++;
+                programCounter++;
                 break;
 
             case MOVLW:
 
                 registerW = command.getCommandArg();
                 checkZeroFlag(registerW);
-                PC++;
+                programCounter++;
                 break;
 
             case RETFIE:
@@ -215,12 +203,13 @@ public class MicroController {
 
             case RETLW:
 
-                //TODO
+                registerW = command.getCommandArg();
+                programCounter = tos.pop();
                 break;
 
             case RETURN:
 
-                //TODO
+                programCounter = tos.pop();
                 break;
 
             case SLEEP:
@@ -232,44 +221,20 @@ public class MicroController {
 
                 // literal - w
 
-                int twoCompliment = (~registerW)+1;
-
-                System.out.println(twoCompliment);
+                int twoCompliment = (~registerW) + 1;
 
                 twoCompliment = twoCompliment & 0x000000FF;
 
-                System.out.println(twoCompliment);
+                add(twoCompliment, command.getCommandArg(), FLAG_REGISTER_W);
 
-                if(!checkOverflowBetweenBitFourAndFive(command.getCommandArg(),twoCompliment)){
-
-                    setBit(3,1,bankOne);
-                    setBit(3,1,bankZero);
-                }
-                else{
-
-                    unsetBit(3,1,bankOne);
-                    unsetBit(3,1,bankZero);
-                }
-                registerW = command.getCommandArg() + twoCompliment;
-                if(!(registerW>255)){
-
-                    setBit(3,0,bankZero);
-                    setBit(3,0,bankOne);
-                }
-                else{
-
-                    setBit(3,0,bankZero);
-                    setBit(3,0,bankOne);
-                }
-                registerW = registerW & 0x000000FF;
-                PC++;
+                programCounter++;
                 break;
 
             case XORLW:
 
                 registerW = registerW ^ command.getCommandArg();
                 checkZeroFlag(registerW);
-                PC++;
+                programCounter++;
                 break;
 
             case DEFAULT:
@@ -282,37 +247,72 @@ public class MicroController {
 
     }
 
-    private boolean checkOverflowBetweenBitFourAndFive(int number1, int number2) {
+    private void add(int number1, int number2, int register) {
+
+        checkOverflowBetweenBitFourAndFive(number1, number2);
+
+        int destination = number1 + number2;
+
+        checkOverflowAtNineBit(destination);
+
+        destination = destination & 0x000000FF;
+
+        checkZeroFlag(destination);
+
+        if (register == FLAG_REGISTER_W) {
+
+            registerW = destination;
+        } else {
+
+            //TODO
+        }
+
+    }
+
+    private void checkOverflowBetweenBitFourAndFive(int number1, int number2) {
 
         number1 = number1 & 0x0000000F;
         number2 = number2 & 0x0000000F;
 
-        return (number1+number2) >15;
+        setOrUnsetBitInRegister(3, 1, number1 + number2, e -> e > 15);
     }
 
-    private void checkZeroFlag(int number){
+    private void checkOverflowAtNineBit(int number) {
 
-        if(number==0){
+        setOrUnsetBitInRegister(3, 0, number, e -> e > 255);
+    }
 
-            setBit(3,2,bankOne);
-            setBit(3,2,bankZero);
+    private void checkZeroFlag(int number) {
+
+        setOrUnsetBitInRegister(3, 2, number, e -> e == 0);
+    }
+
+    private void setOrUnsetBitInRegister(int register, int indexBit, int number, Predicate<Integer> condition) {
+
+        if (condition.test(number)) {
+
+            setBit(register, indexBit, bankOne);
+            setBit(register, indexBit, bankZero);
+        } else {
+
+            unsetBit(register, indexBit, bankOne);
+            unsetBit(register, indexBit, bankZero);
         }
     }
 
-    private void setBit(int register,int indexBit,MemoryBank bank) {
-
+    private void setBit(int register, int indexBit, MemoryBank bank) {
 
         bank.getRegister()[register] = bank.getRegister()[register] & 0x000000FF;
-        bank.getRegister()[register] = bank.getRegister()[register] | (0x00000001<<indexBit);
-
+        bank.getRegister()[register] = bank.getRegister()[register] | (0x00000001 << indexBit);
     }
 
-    private void unsetBit(int register,int indexBit,MemoryBank bank) {
-
+    private void unsetBit(int register, int indexBit, MemoryBank bank) {
 
         bank.getRegister()[register] = bank.getRegister()[register] & 0x000000FF;
-        bank.getRegister()[register] = bank.getRegister()[register] & (0xFFFFFFFE<<indexBit);
 
+        int mask = (int) (Math.pow(2, indexBit) - 1);
+
+        bank.getRegister()[register] = bank.getRegister()[register] & ((0xFFFFFFFE << indexBit) | mask);
     }
 
     public int getRegisterW() {
@@ -331,12 +331,12 @@ public class MicroController {
         return bankOne;
     }
 
-    public int getPC() {
-        return PC;
+    public int getProgramCounter() {
+        return programCounter;
     }
 
     @Override
     public String toString() {
-        return "MicroController{" + "registerW=" + registerW + ", PC=" + PC + ", flags= "+bankOne.getRegister()[3]+ '}';
+        return "MicroController{" + "registerW=" + registerW + ", programCounter=" + programCounter + ", flagC= " + (bankOne.getRegister()[3] & 0x1) + ", flagDC= " + ((bankOne.getRegister()[3] & 0x2) >> 1) + ", flag0= " + ((bankOne.getRegister()[3] & 0x4) >> 2) + '}';
     }
 }

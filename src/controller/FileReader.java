@@ -1,27 +1,24 @@
 package controller;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.util.stream.Collectors;
 
 public class FileReader {
 
-    private BufferedReader bufferedReader;
-    private FileInputStream fileInputStream;
-    private RootLocator rootLocator;
-    private String line;
 
-    public FileReader() throws FileNotFoundException {
-        rootLocator = new RootLocator();
-        fileInputStream = new FileInputStream(rootLocator.getRoot(1));
-        bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
-    }
+    public static void readLine(MicroController m) {
 
-    public void readLine(MicroController m) throws IOException {
-        while ((line = bufferedReader.readLine()) != null) {
-            if (line.charAt(0) != ' ') {
+        RootLocator rootLocator = new RootLocator();
 
-                m.getCommands().add(CommandParser.commandParser(line));
-            }
+        InputStream is = FileReader.class.getResourceAsStream("/TPicSim2.LST");
+
+        try (FileInputStream fileInputStream = new FileInputStream(rootLocator.getRoot(2));
+             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, Charset.forName("windows-1252")))) {
+
+            m.getCommands().addAll(bufferedReader.lines().filter(line -> !line.startsWith(" ")).map(CommandParser::commandParser).collect(Collectors.toList()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        bufferedReader.close();
     }
 }

@@ -2,12 +2,29 @@ package model;
 
 public class MemoryBank {
 
-    int[] register;
+    int[] register = new int[80];
 
+    private static MemoryBank bankZero;
+    private static MemoryBank bankOne;
 
-    public MemoryBank(){
+    public static MemoryBank getInstanceBankZero(){
 
-        register = new int[79];
+        if(bankZero ==null){
+
+            bankZero = new MemoryBank();
+        }
+
+        return bankZero;
+    }
+
+    public static MemoryBank getInstanceBankOne(){
+
+        if(bankOne ==null){
+
+            bankOne = new MemoryBank();
+        }
+
+        return bankOne;
     }
 
     public int[] getRegister() {
