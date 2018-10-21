@@ -2,11 +2,11 @@ package model;
 
 public class CommandLineModel {
 
-	int commandAdress;
-	CommandCode commandCode;
-	int commandArg;
-	int line;
-	String label;
+	private int commandAdress;
+	private CommandCode commandCode;
+	private int commandArg;
+	private int line;
+	private String label;
 	
 	public CommandLineModel(int commandAdress, CommandCode commandCode, int commandArg, int line, String label) {
 		this.commandAdress = commandAdress;
@@ -36,5 +36,5 @@ public class CommandLineModel {
 	public int getLine() {return line;}
 
 	public String getLabel() {return label;}
-	
+
 }

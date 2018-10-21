@@ -2,7 +2,7 @@ package model;
 
 public class MemoryBank {
 
-    int[] register = new int[80];
+    private int[] register = new int[80];
 
     private static MemoryBank bankZero;
     private static MemoryBank bankOne;
