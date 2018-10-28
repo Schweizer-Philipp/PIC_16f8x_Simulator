@@ -1,16 +1,15 @@
-package controller;
+package microController;
 
-import model.MemoryBank;
-import model.CommandLineModel;
+import commandLine.CommandLineModel;
+import memoryBank.MemoryBankDataModel;
 
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Stack;
 import java.util.function.Predicate;
 
-public class MicroController {
-
+public class MicroChipController
+{
 
     private int registerW;
 
@@ -18,22 +17,22 @@ public class MicroController {
 
     private ArrayList<CommandLineModel> commands;
 
-    private MemoryBank bankZero;
+    private MemoryBankDataModel bankZero;
 
-    private MemoryBank bankOne;
+    private MemoryBankDataModel bankOne;
 
     private Deque<Integer> tos;
 
     int programCounter = 0; // Programm Counter
 
 
-    public MicroController() {
+    public MicroChipController() {
 
         commands = new ArrayList<>();
 
-        bankZero = MemoryBank.getInstanceBankZero();
+        bankZero = MemoryBankDataModel.getInstanceBankZero();
 
-        bankOne = MemoryBank.getInstanceBankOne();
+        bankOne = MemoryBankDataModel.getInstanceBankOne();
 
         tos = new LinkedList<>();
     }
@@ -300,13 +299,13 @@ public class MicroController {
         }
     }
 
-    private void setBit(int register, int indexBit, MemoryBank bank) {
+    private void setBit(int register, int indexBit, MemoryBankDataModel bank) {
 
         bank.getRegister()[register] = bank.getRegister()[register] & 0x000000FF;
         bank.getRegister()[register] = bank.getRegister()[register] | (0x00000001 << indexBit);
     }
 
-    private void unsetBit(int register, int indexBit, MemoryBank bank) {
+    private void unsetBit(int register, int indexBit, MemoryBankDataModel bank) {
 
         bank.getRegister()[register] = bank.getRegister()[register] & 0x000000FF;
 
@@ -323,11 +322,11 @@ public class MicroController {
         return commands;
     }
 
-    public MemoryBank getBankZero() {
+    public MemoryBankDataModel getBankZero() {
         return bankZero;
     }
 
-    public MemoryBank getBankOne() {
+    public MemoryBankDataModel getBankOne() {
         return bankOne;
     }
 
@@ -337,6 +336,6 @@ public class MicroController {
 
     @Override
     public String toString() {
-        return "MicroController{" + "registerW=" + registerW + ", programCounter=" + programCounter + ", flagC= " + (bankOne.getRegister()[3] & 0x1) + ", flagDC= " + ((bankOne.getRegister()[3] & 0x2) >> 1) + ", flag0= " + ((bankOne.getRegister()[3] & 0x4) >> 2) + '}';
+        return "MicroChipController{" + "registerW=" + registerW + ", programCounter=" + programCounter + ", flagC= " + (bankOne.getRegister()[3] & 0x1) + ", flagDC= " + ((bankOne.getRegister()[3] & 0x2) >> 1) + ", flag0= " + ((bankOne.getRegister()[3] & 0x4) >> 2) + '}';
     }
 }

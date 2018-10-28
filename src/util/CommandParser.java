@@ -1,13 +1,9 @@
-package controller;
+package util;
 
-import java.util.ArrayList;
+import commandLine.CommandCode;
+import commandLine.CommandLineModel;
 import java.util.Arrays;
-import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import model.CommandCode;
-import model.CommandLineModel;
 
 public class CommandParser {
 

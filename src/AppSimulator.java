@@ -1,26 +1,64 @@
-import controller.FileReader;
-import controller.MicroController;
+import app.ViewLoader;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import microController.MicroChipController;
+import util.FileReader;
+import java.io.*;
 
-import java.io.IOException;
 
-public class AppSimulator {
+/**
+ * ' hso.ra.java.simulator.pic16f8x
+ * ' PACKAGE_NAME
+ * ' Mike Bruder
+ * ' 18.10.2018
+ */
+public class AppSimulator extends Application
+{
 
-    public static void main(String[] args){
+	 private static final String APP_TITLE = "pic16f8x Simulator";
 
-        System.out.println("App Simulator");
-        MicroController m = new MicroController();
-        FileReader.readLine(m);
+	 private Stage primaryStage;
 
-        for (int i = 0; i <100000 ; i++) {
+	 @Override public void start(Stage primaryStage) throws IOException
+	 {
 
-            System.out.println(m.toString());
-            m.executeCommand(m.getCommands().get(m.getProgramCounter()));
+//		  if (Desktop.isDesktopSupported()) {
+//				File file = new File(System.getProperty("user.home") + "/datasheet.pdf");
+//				if (!file.exists()) {
+//					 try (InputStream is = getClass().getResourceAsStream("./datasheet.pdf");
+//							 OutputStream os = new FileOutputStream(file)) {
+//
+//						  byte[] buffer = new byte[1024];
+//						  int length;
+//						  while ((length = is.read(buffer)) > 0) {
+//								os.write(buffer, 0, length);
+//						  }
+//					 }
+//				}
+//				Desktop.getDesktop().open(file);
+//		  }
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+		  this.primaryStage = primaryStage;
+
+		  AnchorPane rootPane = loadRootPane();
+
+		  primaryStage.setScene(new Scene(rootPane, 992, 560));
+		  primaryStage.setTitle(APP_TITLE);
+		  primaryStage.show();
+
+	 }
+
+	 private AnchorPane loadRootPane()
+	 {
+		  return (AnchorPane) ViewLoader.load("/app/root.fxml", primaryStage);
+	 }
+
+	 public static void main(String[] args)
+	 {
+		  launch(args);
+//		  MicroChipController microChipController = new MicroChipController();
+//		  FileReader.readLine(microChipController);
+	 }
 }
