@@ -8,7 +8,6 @@ import javafx.stage.Stage;
  * ' Mike Bruder
  * ' 20.10.2018
  */
-public interface Controlable
-{
-	 void setStage(Stage stage);
+public interface Controlable {
+    void setStage(Stage stage);
 }

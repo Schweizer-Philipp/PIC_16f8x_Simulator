@@ -2,6 +2,7 @@ package util;
 
 import commandLine.CommandCode;
 import commandLine.CommandLineModel;
+
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -15,7 +16,7 @@ public class CommandParser {
         splittedLine = Stream.of(splittedLine).filter(s -> !s.isEmpty()).toArray(String[]::new);
         splittedLine = buildComment(splittedLine);
 
-        int commandAddress = Integer.valueOf(splittedLine[0]);
+        int commandAddress = Integer.decode("0x" + splittedLine[0]);
         int lineNumber = Integer.valueOf(splittedLine[2]);
 
         int[] commandCodeData = getCommandCodeData(Integer.decode("0x" + splittedLine[1]));

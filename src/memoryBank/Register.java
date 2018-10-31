@@ -11,45 +11,39 @@ import javafx.beans.property.StringProperty;
  * ' Mike Bruder
  * ' 27.10.2018
  */
-public class Register implements IRegisterView
-{
-	 private StringProperty name;
+public class Register implements IRegisterView {
+    private StringProperty name;
 
-	 private IntegerProperty address;
+    private IntegerProperty address;
 
-	 public Register(int address, String name)
-	 {
-		  this.name = new SimpleStringProperty(name);
-		  this.address = new SimpleIntegerProperty(address);
-	 }
+    public Register(int address, String name) {
+        this.name = new SimpleStringProperty(name);
+        this.address = new SimpleIntegerProperty(address);
+    }
 
-	 public String getName()
-	 {
-		  return name.get();
-	 }
+    public String getName() {
+        return name.get();
+    }
 
-	 public StringProperty nameProperty()
-	 {
-		  return name;
-	 }
+    public StringProperty nameProperty() {
+        return name;
+    }
 
-	 @Override public void setName(String name)
-	 {
-		  this.name.set(name);
-	 }
+    @Override
+    public void setName(String name) {
+        this.name.set(name);
+    }
 
-	 public int getAddress()
-	 {
-		  return address.get();
-	 }
+    public int getAddress() {
+        return address.get();
+    }
 
-	 public IntegerProperty addressProperty()
-	 {
-		  return address;
-	 }
+    public IntegerProperty addressProperty() {
+        return address;
+    }
 
-	 @Override public String toString()
-	 {
-		  return "name=" + name.get() + ", address=" + address.get();
-	 }
+    @Override
+    public String toString() {
+        return "name=" + name.get() + ", address=" + address.get();
+    }
 }

@@ -5,7 +5,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import microController.MicroChipController;
 import util.FileReader;
-import java.io.*;
+
+import java.io.IOException;
 
 
 /**
@@ -14,15 +15,14 @@ import java.io.*;
  * ' Mike Bruder
  * ' 18.10.2018
  */
-public class AppSimulator extends Application
-{
+public class AppSimulator extends Application {
 
-	 private static final String APP_TITLE = "pic16f8x Simulator";
+    private static final String APP_TITLE = "pic16f8x Simulator";
 
-	 private Stage primaryStage;
+    private Stage primaryStage;
 
-	 @Override public void start(Stage primaryStage) throws IOException
-	 {
+    @Override
+    public void start(Stage primaryStage) throws IOException {
 
 //		  if (Desktop.isDesktopSupported()) {
 //				File file = new File(System.getProperty("user.home") + "/datasheet.pdf");
@@ -40,25 +40,37 @@ public class AppSimulator extends Application
 //				Desktop.getDesktop().open(file);
 //		  }
 
-		  this.primaryStage = primaryStage;
+        this.primaryStage = primaryStage;
 
-		  AnchorPane rootPane = loadRootPane();
+        AnchorPane rootPane = loadRootPane();
 
-		  primaryStage.setScene(new Scene(rootPane, 992, 560));
-		  primaryStage.setTitle(APP_TITLE);
-		  primaryStage.show();
+        primaryStage.setScene(new Scene(rootPane, 992, 560));
+        primaryStage.setTitle(APP_TITLE);
+        primaryStage.show();
 
-	 }
+    }
 
-	 private AnchorPane loadRootPane()
-	 {
-		  return (AnchorPane) ViewLoader.load("/app/root.fxml", primaryStage);
-	 }
+    private AnchorPane loadRootPane() {
+        return (AnchorPane) ViewLoader.load("/app/root.fxml", primaryStage);
+    }
 
-	 public static void main(String[] args)
-	 {
-		  launch(args);
+    public static void main(String[] args) {
+        // launch(args);
 //		  MicroChipController microChipController = new MicroChipController();
 //		  FileReader.getCommandLineModelList(microChipController);
-	 }
+
+        MicroChipController m = new MicroChipController();
+        m.getCommands().addAll(FileReader.getCommandLineModelList());
+
+        for (int i = 0; i < 1000; i++) {
+
+            m.executeCommand(m.getCommands().get(m.getProgramCounter()));
+            System.out.println(m.toString() + "\r\n");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

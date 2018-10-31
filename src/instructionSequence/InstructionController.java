@@ -6,7 +6,6 @@ package instructionSequence;
  * ' Mike Bruder
  * ' 27.10.2018
  */
-public class InstructionController
-{
+public class InstructionController {
 
 }

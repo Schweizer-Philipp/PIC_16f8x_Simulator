@@ -9,13 +9,12 @@ import javafx.beans.property.StringProperty;
  * ' Mike Bruder
  * ' 27.10.2018
  */
-public interface IRegisterView
-{
-	 IntegerProperty addressProperty();
+public interface IRegisterView {
+    IntegerProperty addressProperty();
 
-	 int getAddress();
+    int getAddress();
 
-	 StringProperty nameProperty();
+    StringProperty nameProperty();
 
-	 void setName(String name);
+    void setName(String name);
 }

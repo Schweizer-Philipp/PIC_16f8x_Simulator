@@ -8,548 +8,513 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
-public class MicroChipController
-{
+public class MicroChipController {
 
-	 private int registerW;
+    private int registerW;
 
-	 private static int FLAG_REGISTER_W = -1;
+    private static int FLAG_REGISTER_W = -1;
 
-	 private ArrayList<CommandLineModel> commands;
+    private ArrayList<CommandLineModel> commands;
 
-	 private MemoryBankDataModel bankZero;
+    private MemoryBankDataModel bankZero;
 
-	 private MemoryBankDataModel bankOne;
+    private MemoryBankDataModel bankOne;
 
-	 private Deque<Integer> tos;
+    private Deque<Integer> tos;
 
-	 private int programCounter = 0; // Programm Counter
+    private int programCounter = 0; // Programm Counter
 
-	 private int[] equalRegister = { 0x02, 0x03, 0x04, 0x0A, 0x0B };
+    private int[] equalRegister = {0x02, 0x03, 0x04, 0x0A, 0x0B};
 
-	 private int[] fiveBitRegister = { 0x05, 0x0A, 0x85, 0x88, 0x8A };
+    private int[] fiveBitRegister = {0x05, 0x0A, 0x85, 0x88, 0x8A};
 
-	 public MicroChipController()
-	 {
+    public MicroChipController() {
 
-		  commands = new ArrayList<>();
+        commands = new ArrayList<>();
 
-		  bankZero = MemoryBankDataModel.getInstanceBankZero();
+        bankZero = MemoryBankDataModel.getInstanceBankZero();
 
-		  bankOne = MemoryBankDataModel.getInstanceBankOne();
+        bankOne = MemoryBankDataModel.getInstanceBankOne();
 
-		  tos = new LinkedList<>();
-	 }
+        tos = new LinkedList<>();
+    }
 
-	 public void executeCommand(CommandLineModel command)
-	 {
+    public void executeCommand(CommandLineModel command) {
 
-		  int result;
-		  int twoCompliment;
+        int result;
+        int twoCompliment;
 
-		  switch (command.getCommandCode()) {
+        switch (command.getCommandCode()) {
 
-		  case ADDWF:
+            case ADDWF:
 
-				result = add(getRegisterValue(command.getCommandArg() & 0x7F), registerW);
+                result = add(getRegisterValue(command.getCommandArg() & 0x7F), registerW);
 
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), true);
-				} else {
-					 registerW = result;
-				}
-				programmcounterInc();
-				break;
+                safeValueInRegister(command, result, true);
+                programmcounterInc();
+                break;
 
-		  case ANDWF:
+            case ANDWF:
 
-				result = registerW & (command.getCommandArg() & 0x7F);
-				checkZeroFlag(result);
+                result = registerW & getRegisterValue((command.getCommandArg() & 0x7F));
+                checkZeroFlag(result);
 
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), true);
-				} else {
-					 registerW = result;
-				}
-				programmcounterInc();
-				break;
+                safeValueInRegister(command, result, true);
+                programmcounterInc();
+                break;
 
-		  case CLRF:
+            case CLRF:
 
-				setRegisterValue(0x00, command.getCommandArg(), getCurrentBank(), true);
-				checkZeroFlag(0);
-				programmcounterInc();
-				break;
+                setRegisterValue(0x00, command.getCommandArg(), getCurrentBank(), true);
+                checkZeroFlag(0);
+                programmcounterInc();
+                break;
 
-		  case CLRW:
+            case CLRW:
 
-				setRegisterValue(0x00, FLAG_REGISTER_W, null, true);
-				checkZeroFlag(0);
-				programmcounterInc();
-				break;
+                setRegisterValue(0x00, FLAG_REGISTER_W, null, true);
+                checkZeroFlag(0);
+                programmcounterInc();
+                break;
 
-		  case COMF:
+            case COMF:
 
-				result = ~(command.getCommandArg() & 0x7F);
-				checkZeroFlag(result);
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), true);
-				} else {
-					 registerW = result;
-				}
-				programmcounterInc();
-				break;
+                result = (~getRegisterValue((command.getCommandArg() & 0x7F)) & 0xFF);
+                checkZeroFlag(result);
+                safeValueInRegister(command, result, true);
+                programmcounterInc();
+                break;
 
-		  case DECF:
+            case DECF:
 
-				result = ((command.getCommandArg() & 0x7F) - 1) & 0xFF;
-				checkZeroFlag(result);
+                result = (getRegisterValue((command.getCommandArg() & 0x7F)) - 1) & 0xFF;
+                checkZeroFlag(result);
 
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), true);
-				} else {
-					 registerW = result;
-				}
+                safeValueInRegister(command, result, true);
 
-				programmcounterInc();
-				break;
+                programmcounterInc();
+                break;
 
-		  case DECFSZ:
+            case DECFSZ:
 
-				//TODO
-				break;
+                //TODO
+                break;
 
-		  case INCF:
+            case INCF:
 
-				result = ((command.getCommandArg() & 0x7F) + 1) & 0xFF;
-				checkZeroFlag(result);
+                result = (getRegisterValue((command.getCommandArg() & 0x7F)) + 1) & 0xFF;
+                checkZeroFlag(result);
 
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), true);
-				} else {
-					 registerW = result;
-				}
+                safeValueInRegister(command, result, true);
 
-				programmcounterInc();
-				break;
+                programmcounterInc();
+                break;
 
-		  case INCFSZ:
+            case INCFSZ:
 
-				//TODO
-				break;
+                //TODO
+                break;
 
-		  case IORWF:
+            case IORWF:
 
-				result = registerW | (command.getCommandArg() & 0x7F);
-				checkZeroFlag(~result);
+                result = registerW | getRegisterValue((command.getCommandArg() & 0x7F));
+                checkZeroFlag(~result);
 
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), true);
-				} else {
-					 registerW = result;
-				}
-				programmcounterInc();
-				break;
+                safeValueInRegister(command, result, true);
+                programmcounterInc();
+                break;
 
-		  case MOVF:
+            case MOVF:
 
-				//TODO
-				break;
+                result = getRegisterValue((command.getCommandArg() & 0x7F));
+                checkZeroFlag(result);
 
-		  case MOVWF:
+                safeValueInRegister(command, result, true);
+                programmcounterInc();
+                break;
 
-				if (command.getCommandArg() < 0x50) {
+            case MOVWF:
 
-					 if (Arrays.stream(equalRegister).filter(r -> r == command.getCommandArg()).count() > 0) {
-						  setRegisterValue(registerW, command.getCommandArg(), bankZero, false);
-						  setRegisterValue(registerW, command.getCommandArg(), bankOne, false);
-					 } else {
-						  setRegisterValue(registerW, command.getCommandArg(), null, false);
-					 }
-				}
-				programmcounterInc();
-				break;
+                if (command.getCommandArg() < 0x50) {
 
-		  case NOP:
+                    if (Arrays.stream(equalRegister).filter(r -> r == command.getCommandArg()).count() > 0) {
+                        setRegisterValue(registerW, command.getCommandArg(), bankZero, false);
+                        setRegisterValue(registerW, command.getCommandArg(), bankOne, false);
+                    } else {
+                        setRegisterValue(registerW, command.getCommandArg(), getCurrentBank(), false);
+                    }
+                }
+                programmcounterInc();
+                break;
 
-				programmcounterInc();
-				break;
+            case NOP:
 
-		  case RLF:
+                programmcounterInc();
+                break;
 
-				//TODO
-				break;
+            case RLF:
 
-		  case RRF:
+                //TODO
+                break;
 
-				//TODO
-				break;
+            case RRF:
 
-		  case SUBWF:
+                //TODO
+                break;
 
-				twoCompliment = (~registerW) + 1;
+            case SUBWF:
 
-				twoCompliment = twoCompliment & 0x000000FF;
-				result = add(getRegisterValue(command.getCommandArg() & 0x7F), twoCompliment);
+                twoCompliment = (~registerW) + 1;
 
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), true);
-				} else {
-					 registerW = result;
-				}
-				programmcounterInc();
-				break;
+                twoCompliment = twoCompliment & 0x000000FF;
+                result = add(getRegisterValue(command.getCommandArg() & 0x7F), twoCompliment);
 
-		  case SWAPF:
+                safeValueInRegister(command, result, true);
+                programmcounterInc();
+                break;
 
-				int tempResult = (getRegisterValue(command.getCommandArg() & 0x7F) & 0xF0) >> 4;
+            case SWAPF:
 
-				result = ((getRegisterValue(command.getCommandArg() & 0x7F) & 0xF) << 4) + tempResult;
+                int tempResult = (getRegisterValue(command.getCommandArg() & 0x7F) & 0xF0) >> 4;
 
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), false);
-				} else {
-					 registerW = result;
-				}
-				programmcounterInc();
+                result = ((getRegisterValue(command.getCommandArg() & 0x7F) & 0xF) << 4) + tempResult;
 
-				break;
+                safeValueInRegister(command, result, false);
+                programmcounterInc();
 
-		  case XORWF:
+                break;
 
-				result = registerW ^ (command.getCommandArg() & 0x7F);
-				checkZeroFlag(result);
+            case XORWF:
 
-				if ((command.getCommandArg() & 0x80) > 0) {
-					 setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), true);
-				} else {
-					 registerW = result;
-				}
-				programmcounterInc();
-				break;
+                result = registerW ^ getRegisterValue((command.getCommandArg() & 0x7F));
+                checkZeroFlag(result);
 
-		  case BCF:
+                safeValueInRegister(command, result, true);
+                programmcounterInc();
+                break;
 
-				//TODO
-				break;
+            case BCF:
 
-		  case BSF:
+                //TODO
+                break;
 
-				//TODO
-				break;
+            case BSF:
 
-		  case BTFSC:
+                //TODO
+                break;
 
-				//TODO
-				break;
+            case BTFSC:
 
-		  case BTFSS:
+                //TODO
+                break;
 
-				//TODO
-				break;
+            case BTFSS:
 
-		  case ADDLW:
+                //TODO
+                break;
 
-				result = add(registerW, command.getCommandArg());
-				setRegisterValue(result, FLAG_REGISTER_W, null, true);
-				programmcounterInc();
-				break;
+            case ADDLW:
 
-		  case ANDLW:
+                result = add(registerW, command.getCommandArg());
+                setRegisterValue(result, FLAG_REGISTER_W, null, true);
+                programmcounterInc();
+                break;
 
-				registerW = registerW & command.getCommandArg();
-				checkZeroFlag(registerW);
-				programmcounterInc();
-				break;
+            case ANDLW:
 
-		  case CALL:
+                registerW = registerW & command.getCommandArg();
+                checkZeroFlag(registerW);
+                programmcounterInc();
+                break;
 
-				tos.push(programCounter + 1);
-				programCounter = command.getCommandArg();
-				setPCL();
-				break;
+            case CALL:
 
-		  case CLRWDT:
+                tos.push(programCounter + 1);
+                programCounter = command.getCommandArg();
+                setPCL();
+                break;
 
-				//TODO
-				break;
+            case CLRWDT:
 
-		  case GOTO:
+                //TODO
+                break;
 
-				programCounter = command.getCommandArg();
-				setPCL();
-				break;
+            case GOTO:
 
-		  case IORLW:
+                programCounter = command.getCommandArg();
+                setPCL();
+                break;
 
-				registerW = registerW | command.getCommandArg();
-				checkZeroFlag(registerW);
-				programmcounterInc();
-				break;
+            case IORLW:
 
-		  case MOVLW:
+                registerW = registerW | command.getCommandArg();
+                checkZeroFlag(registerW);
+                programmcounterInc();
+                break;
 
-				registerW = command.getCommandArg();
-				checkZeroFlag(registerW);
-				programmcounterInc();
-				break;
+            case MOVLW:
 
-		  case RETFIE:
+                registerW = command.getCommandArg();
+                checkZeroFlag(registerW);
+                programmcounterInc();
+                break;
 
-				//TODO
-				break;
+            case RETFIE:
 
-		  case RETLW:
+                //TODO
+                break;
 
-				registerW = command.getCommandArg();
-				programCounter = tos.pop();
-				setPCL();
-				break;
+            case RETLW:
 
-		  case RETURN:
+                registerW = command.getCommandArg();
+                programCounter = tos.pop();
+                setPCL();
+                break;
 
-				programCounter = tos.pop();
-				setPCL();
-				break;
+            case RETURN:
 
-		  case SLEEP:
+                programCounter = tos.pop();
+                setPCL();
+                break;
 
-				//TODO
-				break;
+            case SLEEP:
 
-		  case SUBLW:
+                //TODO
+                break;
 
-				// literal - w
+            case SUBLW:
 
-				twoCompliment = (~registerW) + 1;
+                // literal - w
 
-				twoCompliment = twoCompliment & 0x000000FF;
-				result = add(twoCompliment, command.getCommandArg());
+                twoCompliment = (~registerW) + 1;
 
-				setRegisterValue(result, FLAG_REGISTER_W, null, true);
-				programmcounterInc();
-				break;
+                twoCompliment = twoCompliment & 0x000000FF;
+                result = add(twoCompliment, command.getCommandArg());
 
-		  case XORLW:
+                setRegisterValue(result, FLAG_REGISTER_W, null, true);
+                programmcounterInc();
+                break;
 
-				registerW = registerW ^ command.getCommandArg();
-				checkZeroFlag(registerW);
-				programmcounterInc();
-				break;
+            case XORLW:
 
-		  case DEFAULT:
-				//TODO
-				break;
+                registerW = registerW ^ command.getCommandArg();
+                checkZeroFlag(registerW);
+                programmcounterInc();
+                break;
 
-		  }
+            case DEFAULT:
+                //TODO
+                break;
 
-	 }
+        }
 
-	 private void programmcounterInc()
-	 {
+    }
 
-		  programCounter++;
-		  setPCL();
-	 }
+    private void safeValueInRegister(CommandLineModel command, int result, boolean b) {
+        if ((command.getCommandArg() & 0x80) > 0) {
 
-	 private void setPCL()
-	 {
+            if (Arrays.stream(equalRegister).filter(r -> r == (command.getCommandArg() & 0x80)).count() > 0) {
 
-		  setRegisterValue(programCounter & 0xFF, 2, bankZero, false);
-		  setRegisterValue(programCounter & 0xFF, 2, bankOne, false);
-	 }
+                setRegisterValue(result, command.getCommandArg() & 0x7F, bankZero, b);
+                setRegisterValue(result, command.getCommandArg() & 0x7F, bankOne, b);
+            } else {
+                setRegisterValue(result, command.getCommandArg() & 0x7F, getCurrentBank(), b);
+            }
 
-	 private int getRegisterValue(int register)
-	 {
-		  MemoryBankDataModel bank = getCurrentBank();
+        } else {
+            setRegisterValue(result, FLAG_REGISTER_W, null, b);
+        }
+    }
 
-		  if (register == 0) {
-				register = bank.getRegister()[4] & 0x7F;
-				bank = (bank.getRegister()[4] & 0x80) > 0 ? bankOne : bankZero;
-		  }
-		  if (register != 0) {
+    private void programmcounterInc() {
 
-				final int newFiveBitRegister = (bank == bankZero) ? register : register + 0x80;
+        programCounter++;
+        setPCL();
+    }
 
-				if (Arrays.stream(fiveBitRegister).filter(r -> r == newFiveBitRegister).count() > 0) {
-					 return bank.getRegister()[register] & 0x1F;
+    private void setPCL() {
 
-				} else if (register == 0x07) {
-					 return 0;
+        setRegisterValue(programCounter & 0xFF, 2, bankZero, false);
+        setRegisterValue(programCounter & 0xFF, 2, bankOne, false);
+    }
 
-				} else if (register < 0x80) {
-					 return bank.getRegister()[register];
-				} else {
-					 return 0;
-				}
-		  }
+    private int getRegisterValue(int register) {
 
-		  return 0;
-	 }
+        MemoryBankDataModel bank = getCurrentBank();
 
-	 private int add(int number1, int number2)
-	 {
+        if (register == 0) {
+            register = bank.getRegister()[4] & 0x7F;
+            bank = (bank.getRegister()[4] & 0x80) > 0 ? bankOne : bankZero;
+        }
+        if (register != 0) {
 
-		  checkOverflowBetweenBitFourAndFive(number1, number2);
+            final int newFiveBitRegister = (bank == bankZero) ? register : register + 0x80;
 
-		  int sum = number1 + number2;
+            if (Arrays.stream(fiveBitRegister).filter(r -> r == newFiveBitRegister).count() > 0) {
+                return bank.getRegister()[register] & 0x1F;
 
-		  checkOverflowAtNineBit(sum);
+            } else if (register == 0x07) {
+                return 0;
 
-		  sum = sum & 0x000000FF;
+            } else if (register < 0x80) {
+                return bank.getRegister()[register];
+            } else {
+                return 0;
+            }
+        }
 
-		  checkZeroFlag(sum);
+        return 0;
+    }
 
-		  return sum;
+    private int add(int number1, int number2) {
 
-	 }
+        checkOverflowBetweenBitFourAndFive(number1, number2);
 
-	 private void setRegisterValue(int value, int register, MemoryBankDataModel bank, boolean areFlagsTargeted)
-	 {
+        int sum = number1 + number2;
 
-		  if (register == FLAG_REGISTER_W) {
+        checkOverflowAtNineBit(sum);
 
-				registerW = value;
-		  } else {
+        sum = sum & 0x000000FF;
 
-				if (register == 0) {
+        checkZeroFlag(sum);
 
-					 register = bank.getRegister()[4] & 0x7F;
-					 bank = (bank.getRegister()[4] & 0x80) > 0 ? bankOne : bankZero;
-				}
+        return sum;
 
-				if (register != 0) {
+    }
 
-					 if (register == 3) {
+    private void setRegisterValue(int value, int register, MemoryBankDataModel bank, boolean areFlagsTargeted) {
 
-						  if (areFlagsTargeted) {
+        if (register == FLAG_REGISTER_W) {
 
-								// d = value; g = bank.getRegister()[register];
-								// dddd dddd & 1110 0000
-								// ddd0 0000
-								// gggg gggg & 0001 1111
-								// 000g gggg + ddd0 0000
-								// dddg gggg
+            registerW = value;
+        } else {
 
-								value = value & 0xE0;
-								bank.getRegister()[register] = bank.getRegister()[register] & 0x1F;
-								bank.getRegister()[register] = bank.getRegister()[register] + value;
+            if (register == 0) {
 
-						  } else {
+                register = bank.getRegister()[4] & 0x7F;
+                bank = (bank.getRegister()[4] & 0x80) > 0 ? bankOne : bankZero;
+            }
 
-								// d = value; g = bank.getRegister()[register];
-								// dddd dddd & 1110 0111
-								// ddd0 0ddd
-								// gggg gggg & 0001 1000
-								// 000g g000 + ddd0 0ddd
-								// dddg gddd
+            if (register != 0) {
 
-								value = value & 0xE7;
-								bank.getRegister()[register] = bank.getRegister()[register] & 0x18;
-								bank.getRegister()[register] = bank.getRegister()[register] + value;
+                if (register == 3) {
 
-						  }
+                    if (areFlagsTargeted) {
 
-					 } else {
-						  bank.getRegister()[register] = value;
-					 }
-				}
-		  }
+                        // d = value; g = bank.getRegister()[register];
+                        // dddd dddd & 1110 0000
+                        // ddd0 0000
+                        // gggg gggg & 0001 1111
+                        // 000g gggg + ddd0 0000
+                        // dddg gggg
 
-	 }
+                        value = value & 0xE0;
+                        bank.getRegister()[register] = bank.getRegister()[register] & 0x1F;
+                        bank.getRegister()[register] = bank.getRegister()[register] + value;
 
-	 private void checkOverflowBetweenBitFourAndFive(int number1, int number2)
-	 {
+                    } else {
 
-		  number1 = number1 & 0x0000000F;
-		  number2 = number2 & 0x0000000F;
+                        // d = value; g = bank.getRegister()[register];
+                        // dddd dddd & 1110 0111
+                        // ddd0 0ddd
+                        // gggg gggg & 0001 1000
+                        // 000g g000 + ddd0 0ddd
+                        // dddg gddd
 
-		  setOrUnsetBitInRegister(3, 1, number1 + number2, e -> e > 15);
-	 }
+                        value = value & 0xE7;
+                        bank.getRegister()[register] = bank.getRegister()[register] & 0x18;
+                        bank.getRegister()[register] = bank.getRegister()[register] + value;
 
-	 private void checkOverflowAtNineBit(int number)
-	 {
+                    }
 
-		  setOrUnsetBitInRegister(3, 0, number, e -> e > 255);
-	 }
+                } else {
+                    bank.getRegister()[register] = value;
+                }
+            }
+        }
 
-	 private void checkZeroFlag(int number)
-	 {
+    }
 
-		  setOrUnsetBitInRegister(3, 2, number, e -> e == 0);
-	 }
+    private void checkOverflowBetweenBitFourAndFive(int number1, int number2) {
 
-	 private void setOrUnsetBitInRegister(int register, int indexBit, int number, Predicate<Integer> condition)
-	 {
+        number1 = number1 & 0x0000000F;
+        number2 = number2 & 0x0000000F;
 
-		  if (condition.test(number)) {
+        setOrUnsetBitInRegister(3, 1, number1 + number2, e -> e > 15);
+    }
 
-				setBit(register, indexBit, bankOne);
-				setBit(register, indexBit, bankZero);
-		  } else {
+    private void checkOverflowAtNineBit(int number) {
 
-				unsetBit(register, indexBit, bankOne);
-				unsetBit(register, indexBit, bankZero);
-		  }
-	 }
+        setOrUnsetBitInRegister(3, 0, number, e -> e > 255);
+    }
 
-	 private void setBit(int register, int indexBit, MemoryBankDataModel bank)
-	 {
+    private void checkZeroFlag(int number) {
 
-		  bank.getRegister()[register] = bank.getRegister()[register] & 0x000000FF;
-		  bank.getRegister()[register] = bank.getRegister()[register] | (0x00000001 << indexBit);
-	 }
+        setOrUnsetBitInRegister(3, 2, number, e -> e == 0);
+    }
 
-	 private void unsetBit(int register, int indexBit, MemoryBankDataModel bank)
-	 {
+    private void setOrUnsetBitInRegister(int register, int indexBit, int number, Predicate<Integer> condition) {
 
-		  bank.getRegister()[register] = bank.getRegister()[register] & 0x000000FF;
+        if (condition.test(number)) {
 
-		  int mask = (int) (Math.pow(2, indexBit) - 1);
+            setBit(register, indexBit, bankOne);
+            setBit(register, indexBit, bankZero);
+        } else {
 
-		  bank.getRegister()[register] = bank.getRegister()[register] & ((0xFFFFFFFE << indexBit) | mask);
-	 }
+            unsetBit(register, indexBit, bankOne);
+            unsetBit(register, indexBit, bankZero);
+        }
+    }
 
-	 public MemoryBankDataModel getCurrentBank()
-	 {
+    private void setBit(int register, int indexBit, MemoryBankDataModel bank) {
 
-		  int bankStatus = bankOne.getRegister()[3];
-		  bankStatus = bankStatus & 0x20;
+        bank.getRegister()[register] = bank.getRegister()[register] & 0x000000FF;
+        bank.getRegister()[register] = bank.getRegister()[register] | (0x00000001 << indexBit);
+    }
 
-		  return (bankStatus > 0) ? bankOne : bankZero;
-	 }
+    private void unsetBit(int register, int indexBit, MemoryBankDataModel bank) {
 
-	 public int getRegisterW()
-	 {
-		  return registerW;
-	 }
+        bank.getRegister()[register] = bank.getRegister()[register] & 0x000000FF;
 
-	 public ArrayList<CommandLineModel> getCommands()
-	 {
-		  return commands;
-	 }
+        int mask = (int) (Math.pow(2, indexBit) - 1);
 
-	 public MemoryBankDataModel getBankZero()
-	 {
-		  return bankZero;
-	 }
+        bank.getRegister()[register] = bank.getRegister()[register] & ((0xFFFFFFFE << indexBit) | mask);
+    }
 
-	 public MemoryBankDataModel getBankOne()
-	 {
-		  return bankOne;
-	 }
+    public MemoryBankDataModel getCurrentBank() {
 
-	 public int getProgramCounter()
-	 {
-		  return programCounter;
-	 }
+        int bankStatus = bankOne.getRegister()[3];
+        bankStatus = bankStatus & 0x20;
 
-	 @Override public String toString()
-	 {
-		  return "MicroChipController{" + "registerW=" + registerW + ", programCounter=" + programCounter + ", flagC= "
-				  + (bankOne.getRegister()[3] & 0x1) + ", flagDC= " + ((bankOne.getRegister()[3] & 0x2) >> 1) + ", flag0= "
-				  + ((bankOne.getRegister()[3] & 0x4) >> 2) + '}';
-	 }
+        return (bankStatus > 0) ? bankOne : bankZero;
+    }
+
+    public int getRegisterW() {
+        return registerW;
+    }
+
+    public ArrayList<CommandLineModel> getCommands() {
+        return commands;
+    }
+
+    public MemoryBankDataModel getBankZero() {
+        return bankZero;
+    }
+
+    public MemoryBankDataModel getBankOne() {
+        return bankOne;
+    }
+
+    public int getProgramCounter() {
+        return programCounter;
+    }
+
+    @Override
+    public String toString() {
+        return "MicroChipController{" + "registerW=" + registerW + "(0x" + Integer.toHexString(registerW).toUpperCase() + "),(Wert2) Register 0x0D=" + "0x" + Integer.toHexString(getCurrentBank().getRegister()[0x0D]).toUpperCase()
+                + ", (Wert1) Register 0x0C=" + "0x" + Integer.toHexString(getCurrentBank().getRegister()[0x0C]).toUpperCase() + ", programCounter=" + programCounter + ", flagC= "
+                + (bankOne.getRegister()[3] & 0x1) + ", flagDC= " + ((bankOne.getRegister()[3] & 0x2) >> 1) + ", flag0= "
+                + ((bankOne.getRegister()[3] & 0x4) >> 2) + ", BefehlsCode= " + getCommands().get(programCounter - 1).getCommandCode() + '}';
+    }
 }

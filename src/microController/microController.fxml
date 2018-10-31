@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.layout.Pane?>
-<HBox fx:id="parent" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="microController.MicroChipViewController">
-   <children>
-      <VBox fx:id="left"  prefHeight="200.0" prefWidth="100.0" />
-       <Pane fx:id="middle" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: red;"/>
-      <VBox fx:id="right" prefHeight="200.0" prefWidth="100.0" />
-   </children>
+<?import javafx.scene.layout.VBox?>
+<HBox fx:id="parent" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="microController.MicroChipViewController">
+    <children>
+        <VBox fx:id="left" prefHeight="200.0" prefWidth="100.0"/>
+        <Pane fx:id="middle" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: red;"/>
+        <VBox fx:id="right" prefHeight="200.0" prefWidth="100.0"/>
+    </children>
 </HBox>

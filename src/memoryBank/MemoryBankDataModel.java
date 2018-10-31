@@ -1,16 +1,15 @@
 package memoryBank;
 
-public class MemoryBankDataModel
-{
+public class MemoryBankDataModel {
 
     private int[] register = new int[80];
 
     private static MemoryBankDataModel bankZero;
     private static MemoryBankDataModel bankOne;
 
-    public static MemoryBankDataModel getInstanceBankZero(){
+    public static MemoryBankDataModel getInstanceBankZero() {
 
-        if(bankZero ==null){
+        if (bankZero == null) {
 
             bankZero = new MemoryBankDataModel();
         }
@@ -18,9 +17,9 @@ public class MemoryBankDataModel
         return bankZero;
     }
 
-    public static MemoryBankDataModel getInstanceBankOne(){
+    public static MemoryBankDataModel getInstanceBankOne() {
 
-        if(bankOne ==null){
+        if (bankOne == null) {
 
             bankOne = new MemoryBankDataModel();
         }

@@ -11,46 +11,39 @@ import java.util.Objects;
  * ' Mike Bruder
  * ' 31.10.2018
  */
-public class ControlsController
-{
-	 private static MicroChipController microChipController;
+public class ControlsController {
+    private static MicroChipController microChipController;
 
-	 private static ControlsController controlsController;
+    private static ControlsController controlsController;
 
-	 private ControlsController()
-	 {
-		  microChipController = new MicroChipController();
-	 }
+    private ControlsController() {
+        microChipController = new MicroChipController();
+    }
 
-	 public static ControlsController getInstance()
-	 {
+    public static ControlsController getInstance() {
 
-		  if (controlsController == null) {
+        if (controlsController == null) {
 
-				controlsController = new ControlsController();
-		  }
+            controlsController = new ControlsController();
+        }
 
-		  return controlsController;
-	 }
+        return controlsController;
+    }
 
-	 public void start()
-	 {
-	 	 microChipController.getCommands().addAll(Objects.requireNonNull(FileReader.getCommandLineModelList()));
+    public void start() {
+        microChipController.getCommands().addAll(Objects.requireNonNull(FileReader.getCommandLineModelList()));
 
-	 }
+    }
 
-	 public void stop()
-	 {
+    public void stop() {
 
-	 }
+    }
 
-	 public void step()
-	 {
+    public void step() {
 
-	 }
+    }
 
-	 public void restart()
-	 {
+    public void restart() {
 
-	 }
+    }
 }

@@ -1,7 +1,5 @@
 package util;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import memoryBank.IRegisterView;
 import memoryBank.Register;
 
@@ -11,22 +9,21 @@ import memoryBank.Register;
  * ' Mike Bruder
  * ' 31.10.2018
  */
-public class RegisterDataParser
-{
+public class RegisterDataParser {
 
-	 private static final int BANK_ZERO_START = 0x00;
-	 private static final int BANK_ONE_START = 0x80;
+    private static final int BANK_ZERO_START = 0x00;
+    private static final int BANK_ONE_START = 0x80;
 
-	 public static RowList<IRegisterView> getRegisterModel(int[] bankZero, int[] bankOne){
+    public static RowList<IRegisterView> getRegisterModel(int[] bankZero, int[] bankOne) {
 
-	 	 RowList<IRegisterView> rowList = new RowList<>();
+        RowList<IRegisterView> rowList = new RowList<>();
 
-		  for (int i = 0; i < bankOne.length; i++) {
+        for (int i = 0; i < bankOne.length; i++) {
 
-		  	 rowList.add(new Register((BANK_ZERO_START+i),String.valueOf(bankZero[i])),new Register((BANK_ONE_START+i),String.valueOf(bankOne[i])));
+            rowList.add(new Register((BANK_ZERO_START + i), String.valueOf(bankZero[i])), new Register((BANK_ONE_START + i), String.valueOf(bankOne[i])));
 
-		  }
+        }
 
-		  return rowList;
-	 }
+        return rowList;
+    }
 }

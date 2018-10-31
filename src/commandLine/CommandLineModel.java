@@ -1,41 +1,50 @@
 package commandLine;
 
-public class CommandLineModel
-{
+public class CommandLineModel {
 
-	private int commandAdress;
-	private CommandCode commandCode;
-	private int commandArg;
-	private int line;
-	private String label;
-	
-	public CommandLineModel(int commandAdress, CommandCode commandCode, int commandArg, int line, String label) {
-		this.commandAdress = commandAdress;
-		this.commandCode = commandCode;
-		this.commandArg = commandArg;
-		this.line = line;
-		this.label = label;
-	}
+    private int commandAdress;
+    private CommandCode commandCode;
+    private int commandArg;
+    private int line;
+    private String label;
 
-	@Override
-	public String toString() {
-		return "CommandLineModel{" +
-				"commandAdress=" + commandAdress +
-				", commandCode=" + commandCode +
-				", commandArg=" + commandArg +
-				", line=" + line +
-				", label='" + label + '\'' +
-				'}';
-	}
+    public CommandLineModel(int commandAdress, CommandCode commandCode, int commandArg, int line, String label) {
+        this.commandAdress = commandAdress;
+        this.commandCode = commandCode;
+        this.commandArg = commandArg;
+        this.line = line;
+        this.label = label;
+    }
 
-	public int getCommandAdress() {return commandAdress;}
+    @Override
+    public String toString() {
+        return "CommandLineModel{" +
+                "commandAdress=" + commandAdress +
+                ", commandCode=" + commandCode +
+                ", commandArg=" + commandArg +
+                ", line=" + line +
+                ", label='" + label + '\'' +
+                '}';
+    }
 
-	public CommandCode getCommandCode() {return commandCode;}
+    public int getCommandAdress() {
+        return commandAdress;
+    }
 
-	public int getCommandArg() {return commandArg;}
+    public CommandCode getCommandCode() {
+        return commandCode;
+    }
 
-	public int getLine() {return line;}
+    public int getCommandArg() {
+        return commandArg;
+    }
 
-	public String getLabel() {return label;}
+    public int getLine() {
+        return line;
+    }
+
+    public String getLabel() {
+        return label;
+    }
 
 }
