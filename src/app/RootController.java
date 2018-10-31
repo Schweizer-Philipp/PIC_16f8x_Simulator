@@ -1,5 +1,6 @@
 package app;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,6 +36,7 @@ public class RootController implements Controlable, Initializable
 	 @FXML private Label selectedFile;
 
 	 @FXML private SplitPane innerSplitPane;
+
 	 @FXML private AnchorPane rootAnchor;
 
 	 private Stage stage;
@@ -62,6 +64,26 @@ public class RootController implements Controlable, Initializable
 		  }
 	 }
 
+	 @FXML public void handleStartEvent()
+	 {
+			ControlsController.getInstance().start();
+	 }
+
+	 @FXML public void handleStopEvent()
+	 {
+		  ControlsController.getInstance().stop();
+	 }
+
+	 @FXML public void handleStepEvent()
+	 {
+		  ControlsController.getInstance().step();
+	 }
+
+	 @FXML public void handleRestartEvent()
+	 {
+		  ControlsController.getInstance().restart();
+	 }
+
 	 private void loadMicroControllerView()
 	 {
 		  innerSplitPane.getItems().add(ViewLoader.load("/microController/microController.fxml", stage));
@@ -87,5 +109,14 @@ public class RootController implements Controlable, Initializable
 		  innerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
 		  innerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
 		  innerSplitPane.setDividerPosition(0, .5);
+		  model.setFile(FileReader.getCurrentFile());
+		  selectedFile.setText(String.valueOf(model.getFile()));
+		  createMemoryBank();
 	 }
+
+	 private void createMemoryBank()
+	 {
+
+	 }
+
 }

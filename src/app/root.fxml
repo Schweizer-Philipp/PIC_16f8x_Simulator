@@ -34,10 +34,10 @@
         </MenuBar>
         <ToolBar layoutX="113.0" layoutY="34.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
             <items>
-                <Button mnemonicParsing="false" text="Start" />
-                <Button mnemonicParsing="false" text="Step" />
-                <Button mnemonicParsing="false" text="Stop" />
-                <Button mnemonicParsing="false" text="Restart" />
+                <Button mnemonicParsing="false" text="Start" onAction="#handleStartEvent"/>
+                <Button mnemonicParsing="false" text="Step" onAction="#handleStepEvent"/>
+                <Button mnemonicParsing="false" text="Stop" onAction="#handleStopEvent"/>
+                <Button mnemonicParsing="false" text="Restart" onAction="#handleRestartEvent"/>
             </items>
         </ToolBar>
         <SplitPane dividerPositions="0.4" layoutY="65.0" prefHeight="495.0" prefWidth="768.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="65.0">

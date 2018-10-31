@@ -53,6 +53,11 @@ public class MemoryBankViewModel
 		  }
 	 }
 
+	 public void setRegister(RowList<IRegisterView> register)
+	 {
+		  this.register = register;
+	 }
+
 	 public RowList<IRegisterView> getRegister()
 	 {
 		  return register;

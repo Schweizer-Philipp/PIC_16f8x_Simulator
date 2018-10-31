@@ -59,6 +59,6 @@ public class AppSimulator extends Application
 	 {
 		  launch(args);
 //		  MicroChipController microChipController = new MicroChipController();
-//		  FileReader.readLine(microChipController);
+//		  FileReader.getCommandLineModelList(microChipController);
 	 }
 }
