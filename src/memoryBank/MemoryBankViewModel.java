@@ -1,5 +1,9 @@
 package memoryBank;
 
+import app.Model;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import util.RowElement;
 import util.RowList;
 
 /**
@@ -8,21 +12,20 @@ import util.RowList;
  * ' Mike Bruder
  * ' 27.10.2018
  */
-public class MemoryBankViewModel {
+public class MemoryBankViewModel implements Model {
     private static final int REGISTER_AMOUNT = 0x50;
 
     private static final int REGISTER_PADDING = 0x80;
 
-    private RowList<IRegisterView> register;
+    private ObservableList<RowElement<IRegisterView>> registerData;
 
     public MemoryBankViewModel() {
-        this.register = new RowList<>();
         initializeRegisters();
     }
 
     private void initializeRegisters() {
-        System.out.println(REGISTER_AMOUNT);
 
+        RowList<IRegisterView> register = new RowList<>();
         final String[][] registerNames = {{"Indirect addr.", "Indirect addr."}, {"TMR0", "OPTION"},
                 {"PCL", "PCL"}, {"STATUS", "STATUS"}, {"FSR", "FSR"}, {"PORTA", "TRISA"}, {"PORTB", "TRISB"},
                 {"", ""}, {"EEDATA", "EECON1"}, {"EEADR", "EECON2"}, {"PCLATH", "PCLATH"},
@@ -31,9 +34,9 @@ public class MemoryBankViewModel {
         // RegisterNamen
         for (int i = 0; i < registerNames.length; i++) {
 
-            Register bankZero = new Register(i, registerNames[i][0]);
+            Register bankZero = new Register(i, registerNames[i][0], false);
 
-            Register bankOne = new Register(i + REGISTER_PADDING, registerNames[i][1]);
+            Register bankOne = new Register(i + REGISTER_PADDING, registerNames[i][1], false);
 
             register.add(bankZero, bankOne);
         }
@@ -41,20 +44,29 @@ public class MemoryBankViewModel {
         // "die ohne titel"
         for (int i = registerNames.length; i < REGISTER_AMOUNT; i++) {
 
-            Register bankZero = new Register(i, "SRAM");
+            Register bankZero = new Register(i, "SRAM", false);
 
-            Register bankOne = new Register(i + REGISTER_PADDING, "MAPPING");
+            Register bankOne = new Register(i + REGISTER_PADDING, "MAPPING", false);
 
             register.add(bankZero, bankOne);
 
         }
+        registerData = FXCollections.observableArrayList(register.toList());
     }
 
-    public void setRegister(RowList<IRegisterView> register) {
-        this.register = register;
+
+    public void setRegisterData(ObservableList<RowElement<IRegisterView>> registerData) {
+        this.registerData = registerData;
     }
 
-    public RowList<IRegisterView> getRegister() {
-        return register;
+    public ObservableList<RowElement<IRegisterView>> getRegisterData() {
+
+        return registerData;
+    }
+
+    public void changeListData(RowList<IRegisterView> register) {
+
+        registerData.clear();
+        registerData.addAll(register.toList());
     }
 }

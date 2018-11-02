@@ -30,4 +30,8 @@ public class MemoryBankDataModel {
     public int[] getRegister() {
         return register;
     }
+
+    public void restart() {
+        register = new int[80];
+    }
 }

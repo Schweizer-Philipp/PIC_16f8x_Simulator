@@ -1,7 +1,9 @@
 package app;
 
+import memoryBank.MemoryBankViewModel;
 import microController.MicroChipController;
 import util.FileReader;
+import util.RegisterDataParser;
 
 import java.util.Objects;
 
@@ -12,12 +14,17 @@ import java.util.Objects;
  * ' 31.10.2018
  */
 public class ControlsController {
-    private static MicroChipController microChipController;
+
+    private static MicroChipController microChipController = new MicroChipController();
 
     private static ControlsController controlsController;
 
+    private static MemoryBankViewModel memoryBankViewModel;
+
+    private boolean startThreadActive = false;
+
     private ControlsController() {
-        microChipController = new MicroChipController();
+        setCommandsForMicroController();
     }
 
     public static ControlsController getInstance() {
@@ -31,19 +38,52 @@ public class ControlsController {
     }
 
     public void start() {
-        microChipController.getCommands().addAll(Objects.requireNonNull(FileReader.getCommandLineModelList()));
 
+        startThreadActive = true;
+        new Thread(() -> {
+
+            while (startThreadActive) {
+
+                microChipController.executeCommand(microChipController.getCommands().get(microChipController.getProgramCounter()));
+                memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
+                System.out.println(microChipController.toString());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }).start();
     }
 
     public void stop() {
 
+        startThreadActive = false;
     }
 
     public void step() {
 
+        startThreadActive = false;
+        microChipController.executeCommand(microChipController.getCommands().get(microChipController.getProgramCounter()));
+        memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
+        System.out.println(microChipController.toString());
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     public void restart() {
+        microChipController.restart();
+    }
 
+    public static void setMemoryBankViewModel(MemoryBankViewModel memoryBankViewModel) {
+
+        ControlsController.memoryBankViewModel = memoryBankViewModel;
+    }
+
+    public static void setCommandsForMicroController() {
+
+        microChipController.getCommands().addAll((Objects.requireNonNull(FileReader.getCommandLineModelList())));
     }
 }

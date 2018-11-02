@@ -3,8 +3,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import microController.MicroChipController;
-import util.FileReader;
 
 import java.io.IOException;
 
@@ -55,14 +53,14 @@ public class AppSimulator extends Application {
     }
 
     public static void main(String[] args) {
-        // launch(args);
+        launch(args);
 //		  MicroChipController microChipController = new MicroChipController();
 //		  FileReader.getCommandLineModelList(microChipController);
 
-        MicroChipController m = new MicroChipController();
+        /*MicroChipController m = new MicroChipController();
         m.getCommands().addAll(FileReader.getCommandLineModelList());
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1; i++) {
 
             m.executeCommand(m.getCommands().get(m.getProgramCounter()));
             System.out.println(m.toString() + "\r\n");
@@ -71,6 +69,6 @@ public class AppSimulator extends Application {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 }

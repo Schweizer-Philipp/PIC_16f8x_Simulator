@@ -7,6 +7,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import memoryBank.MemoryBankViewModel;
 import util.FileReader;
 
 import java.io.File;
@@ -31,18 +32,22 @@ public class RootController implements Controlable, Initializable {
 
     private Stage stage;
 
+    private MemoryBankViewModel memoryBankViewModel = new MemoryBankViewModel();
+
     private RootModel model = new RootModel();
 
     @FXML
     public void handleOpenFileEvent() {
         final FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Datei", "*.LST"));
+
         File file = fileChooser.showOpenDialog(stage);
 
         if (file != null) {
             model.setFile(String.valueOf(file));
             selectedFile.setText(String.valueOf(model.getFile()));
             FileReader.setCurrentFile(model.getFile());
-
+            ControlsController.setCommandsForMicroController();
             innerSplitPane.getItems().clear();
 
             loadMicroControllerView();
@@ -79,7 +84,7 @@ public class RootController implements Controlable, Initializable {
     }
 
     private void loadMemoryBankView() {
-        innerSplitPane.getItems().add(ViewLoader.load("/memoryBank/memoryBank.fxml", stage));
+        innerSplitPane.getItems().add(ViewLoader.load("/memoryBank/memoryBank.fxml", stage, memoryBankViewModel, MemoryBankViewModel.class));
     }
 
     public void setStage(Stage stage) {
@@ -93,6 +98,8 @@ public class RootController implements Controlable, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        ControlsController.setMemoryBankViewModel(memoryBankViewModel);
         innerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
         innerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
         innerSplitPane.setDividerPosition(0, .5);

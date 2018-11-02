@@ -2,7 +2,6 @@ package memoryBank;
 
 import app.Controlable;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,6 +39,11 @@ public class MemoryBankController implements Controlable, Initializable {
 
     private MemoryBankViewModel model;
 
+
+    public MemoryBankController(MemoryBankViewModel model) {
+        this.model = model;
+    }
+
     @Override
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -47,7 +51,6 @@ public class MemoryBankController implements Controlable, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.model = new MemoryBankViewModel();
 
         leftFileAddress.prefWidthProperty().bind(table.widthProperty().multiply(.2d));
         bankZero.prefWidthProperty().bind(table.widthProperty().multiply(.3d));
@@ -58,8 +61,8 @@ public class MemoryBankController implements Controlable, Initializable {
     }
 
     private void initializeTableData() {
-        final ObservableList<RowElement<IRegisterView>> data = FXCollections
-                .observableArrayList(model.getRegister().toList());
+        final ObservableList<RowElement<IRegisterView>> data = model.getRegisterData();
+        model.setRegisterData(data);
 
         leftFileAddress.setCellValueFactory(
                 rowData -> new SimpleStringProperty(formatAddress(rowData.getValue().getLeftElement().getAddress())));
