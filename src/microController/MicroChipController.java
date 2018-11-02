@@ -198,8 +198,8 @@ public class MicroChipController {
 
             case RLF:
 
-                result = (getRegisterValue((command.getCommandArg() & 0x7F)) & 0xFF); // 1000 1000
-                result = result << 1; //0001 0001 0000
+                result = (getRegisterValue((command.getCommandArg() & 0x7F)) & 0xFF);
+                result = result << 1;
                 result = result + (getRegisterValue(STATUS_REGISTER) & 0x1);
 
                 bankZero.getRegister()[STATUS_REGISTER] = (getRegisterValue(STATUS_REGISTER) & 0xFE) + (result >> 8);
@@ -260,22 +260,59 @@ public class MicroChipController {
 
             case BCF:
 
-                //TODO
+                if ((command.getCommandArg() & 0x7F) <= 80) {
+
+                    if (Arrays.stream(equalRegister).anyMatch(r -> r == (command.getCommandArg() & 0x7F))) {
+
+                        unsetBit(command.getCommandArg() & 0x7F, ((command.getCommandArg() & 0x380) >> 7), bankZero);
+                        unsetBit(command.getCommandArg() & 0x7F, ((command.getCommandArg() & 0x380) >> 7), bankOne);
+                    } else {
+                        unsetBit(command.getCommandArg() & 0x7F, ((command.getCommandArg() & 0x380) >> 7), getCurrentBank());
+                    }
+                }
+
+                programmcounterInc();
+
                 break;
 
             case BSF:
 
-                //TODO
+                if ((command.getCommandArg() & 0x7F) <= 80) {
+
+                    if (Arrays.stream(equalRegister).anyMatch(r -> r == (command.getCommandArg() & 0x7F))) {
+
+                        setBit(command.getCommandArg() & 0x7F, ((command.getCommandArg() & 0x380) >> 7), bankZero);
+                        setBit(command.getCommandArg() & 0x7F, ((command.getCommandArg() & 0x380) >> 7), bankOne);
+                    } else {
+                        setBit(command.getCommandArg() & 0x7F, ((command.getCommandArg() & 0x380) >> 7), getCurrentBank());
+                    }
+                }
+
+                programmcounterInc();
                 break;
 
             case BTFSC:
 
-                //TODO
+                result = ((getRegisterValue(command.getCommandArg() & 0x7F) >> ((command.getCommandArg() & 0x380) >> 7))) & 0x1;
+
+                if (result == 0) {
+
+                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, null));
+                }
+
+                programmcounterInc();
                 break;
 
             case BTFSS:
 
-                //TODO
+                result = ((getRegisterValue(command.getCommandArg() & 0x7F) >> ((command.getCommandArg() & 0x380) >> 7))) & 0x1;
+
+                if (result == 1) {
+
+                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, null));
+                }
+
+                programmcounterInc();
                 break;
 
             case ADDLW:
@@ -295,7 +332,7 @@ public class MicroChipController {
             case CALL:
 
                 tos.push(programCounter + 1);
-                programCounter = command.getCommandArg();
+                programCounter = ((getRegisterValue(10) & 0x18) << 8) + command.getCommandArg();
                 setPCL();
                 break;
 
@@ -306,7 +343,7 @@ public class MicroChipController {
 
             case GOTO:
 
-                programCounter = command.getCommandArg();
+                programCounter = ((getRegisterValue(10) & 0x18) << 8) + command.getCommandArg();
                 setPCL();
                 break;
 
@@ -378,7 +415,7 @@ public class MicroChipController {
     private void safeValueInRegister(CommandLineModel command, int result, boolean b) {
         if ((command.getCommandArg() & 0x80) > 0) {
 
-            if (Arrays.stream(equalRegister).anyMatch(r -> r == (command.getCommandArg() & 0x80))) {
+            if (Arrays.stream(equalRegister).anyMatch(r -> r == (command.getCommandArg() & 0x7F))) {
 
                 setRegisterValue(result, command.getCommandArg() & 0x7F, bankZero, b);
                 setRegisterValue(result, command.getCommandArg() & 0x7F, bankOne, b);
@@ -449,6 +486,8 @@ public class MicroChipController {
 
     private void setRegisterValue(int value, int register, MemoryBankDataModel bank, boolean areFlagsTargeted) {
 
+        value = value & 0xFF;
+
         if (register == FLAG_REGISTER_W) {
 
             registerW = value;
@@ -492,6 +531,10 @@ public class MicroChipController {
 
                     }
 
+                } else if (register == 2) {
+
+                    bank.getRegister()[register] = value;
+                    programCounter = (getRegisterValue(10) << 8) + getRegisterValue(2);
                 } else {
                     bank.getRegister()[register] = value;
                 }
