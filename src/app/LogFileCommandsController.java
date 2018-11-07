@@ -10,6 +10,13 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * app
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public class LogFileCommandsController implements Controlable, Initializable {
 
     private Stage stage;
@@ -34,7 +41,7 @@ public class LogFileCommandsController implements Controlable, Initializable {
 
     public void update(CommandLineModel commandLineModel) {
         logNumber++;
-        Platform.runLater( () -> logArea.appendText(String.valueOf(logNumber) + ". " + commandLineModel.toStringSmall()));
+        Platform.runLater(() -> logArea.appendText(String.valueOf(logNumber) + ". " + commandLineModel.toStringSmall()));
         Platform.runLater(() -> logArea.appendText("\n\n"));
     }
 

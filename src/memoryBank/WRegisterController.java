@@ -12,6 +12,13 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * memoryBank
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public class WRegisterController implements Controlable, Initializable {
 
     @FXML
@@ -38,7 +45,8 @@ public class WRegisterController implements Controlable, Initializable {
         wRegisterTable.getItems().addAll("0x00");
         ControlsController.getInstance().setwRegisterController(this);
     }
-    public void update(String update){
+
+    public void update(String update) {
 
         wRegisterTable.getItems().clear();
         wRegisterTable.getItems().add(update);

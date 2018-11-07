@@ -4,10 +4,10 @@ import memoryBank.IRegisterView;
 import memoryBank.Register;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' util
- * ' Mike Bruder
- * ' 31.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * util
+ * Mike Bruder, Philipp Schweizer
+ * 31.10.2018
  */
 public class RegisterDataParser {
 

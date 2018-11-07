@@ -5,10 +5,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' microController
- * ' Mike Bruder
- * ' 20.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * microController
+ * Mike Bruder, Philipp Schweizer
+ * 20.10.2018
  */
 public class PinModel {
 

@@ -10,6 +10,13 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * util
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public class FileReader {
 
     private static StringProperty currentFile = new SimpleStringProperty(ControlsController.class.getResource("/test/TPicSim4.LST").getFile());

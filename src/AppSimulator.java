@@ -8,10 +8,10 @@ import java.io.IOException;
 
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' PACKAGE_NAME
- * ' Mike Bruder
- * ' 18.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * PACKAGE_NAME
+ * Mike Bruder, Philipp Schweizer
+ * 18.10.2018
  */
 public class AppSimulator extends Application {
 

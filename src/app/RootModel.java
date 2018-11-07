@@ -4,10 +4,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' app
- * ' Mike Bruder
- * ' 18.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * app
+ * Mike Bruder, Philipp Schweizer
+ * 18.10.2018
  */
 public class RootModel {
 

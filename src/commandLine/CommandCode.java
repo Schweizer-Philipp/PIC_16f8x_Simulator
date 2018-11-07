@@ -2,6 +2,13 @@ package commandLine;
 
 import java.util.stream.Stream;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * commandLine
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public enum CommandCode {
 
     ADDWF(0x0700),

@@ -10,6 +10,13 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * memoryBank
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public class DetailStatusRegisterController implements Controlable, Initializable {
 
     private Stage stage;

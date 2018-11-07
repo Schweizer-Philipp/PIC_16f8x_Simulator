@@ -6,6 +6,13 @@ import commandLine.CommandLineModel;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * util
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public class CommandParser {
 
 

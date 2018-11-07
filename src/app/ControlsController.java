@@ -9,10 +9,10 @@ import util.RegisterDataParser;
 import java.util.Objects;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' app
- * ' Mike Bruder
- * ' 31.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * app
+ * Mike Bruder, Philipp Schweizer
+ * 31.10.2018
  */
 public class ControlsController {
 
@@ -52,7 +52,7 @@ public class ControlsController {
                 microChipController.executeCommand(microChipController.getCommands().get(microChipController.getProgramCounter()));
                 memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
                 logFileCommandsController.update(microChipController.getLastExecutedCommand());
-                wRegisterController.update("0x"+Integer.toHexString(microChipController.getRegisterW()));
+                wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()));
                 System.out.println(microChipController.toString());
                 try {
                     Thread.sleep(1000);
@@ -76,7 +76,7 @@ public class ControlsController {
         microChipController.executeCommand(microChipController.getCommands().get(microChipController.getProgramCounter()));
         memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
         logFileCommandsController.update(microChipController.getLastExecutedCommand());
-        wRegisterController.update("0x"+Integer.toHexString(microChipController.getRegisterW()));
+        wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()));
         System.out.println(microChipController.toString());
     }
 
@@ -85,7 +85,7 @@ public class ControlsController {
         microChipController.restart();
         logFileCommandsController.reset();
         memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
-        wRegisterController.update("0x"+Integer.toHexString(microChipController.getRegisterW()));
+        wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()));
     }
 
     public static void setMemoryBankViewModel(MemoryBankViewModel memoryBankViewModel) {

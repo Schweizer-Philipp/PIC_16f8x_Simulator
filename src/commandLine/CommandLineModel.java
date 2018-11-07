@@ -1,5 +1,12 @@
 package commandLine;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * commandLine
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public class CommandLineModel {
 
     private int commandAdress;

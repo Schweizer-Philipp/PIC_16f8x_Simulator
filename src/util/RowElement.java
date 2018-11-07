@@ -1,10 +1,10 @@
 package util;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' microController
- * ' Mike Bruder
- * ' 27.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * microController
+ * Mike Bruder, Philipp Schweizer
+ * 27.10.2018
  */
 public class RowElement<E> {
     private E leftElement;

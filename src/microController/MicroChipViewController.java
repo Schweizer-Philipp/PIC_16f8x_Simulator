@@ -19,10 +19,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' microController
- * ' Mike Bruder
- * ' 20.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * microController
+ * Mike Bruder, Philipp Schweizer
+ * 20.10.2018
  */
 public class MicroChipViewController implements Controlable, Initializable {
 

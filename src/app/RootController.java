@@ -17,10 +17,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' app
- * ' Mike Bruder
- * ' 18.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * app
+ * Mike Bruder, Philipp Schweizer
+ * 18.10.2018
  */
 public class RootController implements Controlable, Initializable {
     @FXML

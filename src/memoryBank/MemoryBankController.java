@@ -14,10 +14,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' memoryBank
- * ' Mike Bruder
- * ' 20.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * memoryBank
+ * Mike Bruder, Philipp Schweizer
+ * 20.10.2018
  */
 public class MemoryBankController implements Controlable, Initializable {
     private Stage stage;

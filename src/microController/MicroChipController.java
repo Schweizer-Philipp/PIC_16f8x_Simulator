@@ -10,6 +10,13 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.function.Predicate;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * microController
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public class MicroChipController {
 
     private int registerW;

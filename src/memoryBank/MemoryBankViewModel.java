@@ -10,10 +10,10 @@ import util.RowElement;
 import util.RowList;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' memoryBank
- * ' Mike Bruder
- * ' 27.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * memoryBank
+ * Mike Bruder, Philipp Schweizer
+ * 27.10.2018
  */
 public class MemoryBankViewModel implements Model {
     private static final int REGISTER_AMOUNT = 0x50;

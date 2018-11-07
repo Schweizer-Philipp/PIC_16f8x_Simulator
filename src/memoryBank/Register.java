@@ -3,10 +3,10 @@ package memoryBank;
 import javafx.beans.property.*;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' memoryBank
- * ' Mike Bruder
- * ' 27.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * memoryBank
+ * Mike Bruder, Philipp Schweizer
+ * 27.10.2018
  */
 public class Register implements IRegisterView {
     private StringProperty name;

@@ -1,5 +1,12 @@
 package memoryBank;
 
+/**
+ * hso.ra.java.simulator.pic16f8x
+ * memoryBank
+ * Mike Bruder, Philipp Schweizer
+ * 7.11.2018
+ */
+
 public class MemoryBankDataModel {
 
     private int[] register = new int[80];

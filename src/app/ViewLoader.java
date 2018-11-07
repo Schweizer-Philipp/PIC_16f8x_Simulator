@@ -10,10 +10,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 /**
- * ' hso.ra.java.simulator.pic16f8x
- * ' app
- * ' Mike Bruder
- * ' 20.10.2018
+ * hso.ra.java.simulator.pic16f8x
+ * app
+ * Mike Bruder, Philipp Schweizer
+ * 20.10.2018
  */
 public final class ViewLoader {
 
