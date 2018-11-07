@@ -1,5 +1,7 @@
 package app;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -25,7 +27,10 @@ public class RootController implements Controlable, Initializable {
     private Label selectedFile;
 
     @FXML
-    private SplitPane innerSplitPane;
+    private SplitPane leftInnerSplitPane;
+
+    @FXML
+    private SplitPane rightInnerSplitPane;
 
     @FXML
     private AnchorPane rootAnchor;
@@ -48,7 +53,7 @@ public class RootController implements Controlable, Initializable {
             selectedFile.setText(String.valueOf(model.getFile()));
             FileReader.setCurrentFile(model.getFile());
             ControlsController.setCommandsForMicroController();
-            innerSplitPane.getItems().clear();
+            leftInnerSplitPane.getItems().clear();
 
             loadMicroControllerView();
             loadMemoryBankView();
@@ -80,36 +85,60 @@ public class RootController implements Controlable, Initializable {
     }
 
     private void loadMicroControllerView() {
-        innerSplitPane.getItems().add(ViewLoader.load("/microController/microController.fxml", stage));
+        leftInnerSplitPane.getItems().add(ViewLoader.load("/microController/microController.fxml", stage));
     }
 
     private void loadMemoryBankView() {
-        innerSplitPane.getItems().add(ViewLoader.load("/memoryBank/memoryBank.fxml", stage, memoryBankViewModel, MemoryBankViewModel.class));
+        leftInnerSplitPane.getItems().add(ViewLoader.load("/memoryBank/memoryBank.fxml", stage, memoryBankViewModel, MemoryBankViewModel.class));
+    }
+
+    private void loadDetailStatusRegister() {
+
+        rightInnerSplitPane.getItems().add(ViewLoader.load("/memoryBank/detailStatusRegister.fxml", stage, memoryBankViewModel, MemoryBankViewModel.class));
+    }
+
+    private void loadLogfile() {
+
+        rightInnerSplitPane.getItems().add(ViewLoader.load("/app/logFileCommands.fxml", stage));
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
 
-        innerSplitPane.getItems().clear();
+        stage.showingProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    rightInnerSplitPane.setDividerPositions(0.855);
+                    observable.removeListener(this);
+                }
+            }
+
+        });
+
+        leftInnerSplitPane.getItems().clear();
+        rightInnerSplitPane.getItems().clear();
 
         loadMicroControllerView();
         loadMemoryBankView();
+
+        loadLogfile();
+        loadDetailStatusRegister();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         ControlsController.setMemoryBankViewModel(memoryBankViewModel);
-        innerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
-        innerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
-        innerSplitPane.setDividerPosition(0, .5);
+        leftInnerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
+        leftInnerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
+        //leftInnerSplitPane.setDividerPosition(0, .1); ändert nichts
+
+        rightInnerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
+        rightInnerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
+
         model.setFile(FileReader.getCurrentFile());
         selectedFile.setText(String.valueOf(model.getFile()));
-        createMemoryBank();
     }
-
-    private void createMemoryBank() {
-
-    }
-
 }

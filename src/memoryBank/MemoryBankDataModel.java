@@ -7,6 +7,10 @@ public class MemoryBankDataModel {
     private static MemoryBankDataModel bankZero;
     private static MemoryBankDataModel bankOne;
 
+    private MemoryBankDataModel() {
+        initialize();
+    }
+
     public static MemoryBankDataModel getInstanceBankZero() {
 
         if (bankZero == null) {
@@ -31,7 +35,7 @@ public class MemoryBankDataModel {
         return register;
     }
 
-    public void restart() {
-        register = new int[80];
+    public void initialize() {
+        //TODO Mike setzt alle werte beim anschalten
     }
 }

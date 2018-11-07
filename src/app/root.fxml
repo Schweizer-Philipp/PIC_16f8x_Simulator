@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <AnchorPane fx:id="rootAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="560.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+            prefHeight="560.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.RootController">
     <children>
         <MenuBar accessibleRole="SLIDER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="768.0" AnchorPane.leftAnchor="0.0"
@@ -30,10 +30,10 @@
         <ToolBar layoutX="113.0" layoutY="34.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0"
                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
             <items>
-                <Button mnemonicParsing="false" text="Start" onAction="#handleStartEvent"/>
-                <Button mnemonicParsing="false" text="Step" onAction="#handleStepEvent"/>
-                <Button mnemonicParsing="false" text="Stop" onAction="#handleStopEvent"/>
-                <Button mnemonicParsing="false" text="Restart" onAction="#handleRestartEvent"/>
+                <Button mnemonicParsing="false" onAction="#handleStartEvent" text="Start"/>
+                <Button mnemonicParsing="false" onAction="#handleStepEvent" text="Step"/>
+                <Button mnemonicParsing="false" onAction="#handleStopEvent" text="Stop"/>
+                <Button mnemonicParsing="false" onAction="#handleRestartEvent" text="Restart"/>
             </items>
         </ToolBar>
         <SplitPane dividerPositions="0.4" layoutY="65.0" prefHeight="495.0" prefWidth="768.0"
@@ -42,7 +42,7 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <SplitPane fx:id="innerSplitPane" dividerPositions="0.6" orientation="VERTICAL"
+                        <SplitPane fx:id="leftInnerSplitPane" dividerPositions="0.6" orientation="VERTICAL"
                                    prefHeight="493.0" prefWidth="252.0" AnchorPane.bottomAnchor="0.0"
                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <items>
@@ -54,6 +54,15 @@
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
+                        <SplitPane fx:id="rightInnerSplitPane" dividerPositions="0.8602620087336245"
+                                   orientation="VERTICAL" prefHeight="460.0" prefWidth="457.0"
+                                   AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="0.0"
+                                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="125.0" prefWidth="455.0"/>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="342.0" prefWidth="455.0"/>
+                            </items>
+                        </SplitPane>
                         <HBox layoutY="468.0" prefHeight="25.0" prefWidth="533.0" AnchorPane.bottomAnchor="0.0"
                               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                             <children>

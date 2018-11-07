@@ -19,6 +19,8 @@ public class ControlsController {
 
     private static ControlsController controlsController;
 
+    private LogFileCommandsController logFileCommandsController;
+
     private static MemoryBankViewModel memoryBankViewModel;
 
     private boolean startThreadActive = false;
@@ -46,6 +48,7 @@ public class ControlsController {
 
                 microChipController.executeCommand(microChipController.getCommands().get(microChipController.getProgramCounter()));
                 memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
+                logFileCommandsController.update(microChipController.getLastExecutedCommand());
                 System.out.println(microChipController.toString());
                 try {
                     Thread.sleep(1000);
@@ -68,13 +71,14 @@ public class ControlsController {
         startThreadActive = false;
         microChipController.executeCommand(microChipController.getCommands().get(microChipController.getProgramCounter()));
         memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
+        logFileCommandsController.update(microChipController.getLastExecutedCommand());
         System.out.println(microChipController.toString());
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 
     public void restart() {
+        startThreadActive = false;
         microChipController.restart();
+        logFileCommandsController.reset();
     }
 
     public static void setMemoryBankViewModel(MemoryBankViewModel memoryBankViewModel) {
@@ -85,5 +89,9 @@ public class ControlsController {
     public static void setCommandsForMicroController() {
 
         microChipController.getCommands().addAll((Objects.requireNonNull(FileReader.getCommandLineModelList())));
+    }
+
+    public void setLogFileCommandsController(LogFileCommandsController logFileCommandsController) {
+        this.logFileCommandsController = logFileCommandsController;
     }
 }

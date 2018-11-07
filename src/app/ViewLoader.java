@@ -17,9 +17,6 @@ import java.util.Objects;
  */
 public final class ViewLoader {
 
-
-    private static final String PACKAGE_PATH = "/de/robatsky/microcontrollerui/";
-
     private ViewLoader() {
     }
 
@@ -42,10 +39,14 @@ public final class ViewLoader {
 
         Pane viewToLoad = new Pane();
         try {
+
+
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ViewLoader.class.getResource(fxmlPath));
 
+
             if (clazz != null && model != null) {
+
                 loader.setControllerFactory(param -> tryToCreateInstance(model, clazz, param));
             }
 

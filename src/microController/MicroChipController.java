@@ -26,7 +26,7 @@ public class MicroChipController {
 
     private Deque<Integer> tos;
 
-    private CommandCode code;
+    private CommandLineModel lastExecutedCommand;
 
     private int programCounter = 0; // Programm Counter
 
@@ -48,15 +48,15 @@ public class MicroChipController {
     }
 
     private void initialize() {
-        //TODO Mike bits setzen vom controller beim start oder restart
+
+        bankZero.initialize();
+        bankOne.initialize();
     }
 
     public void restart() {
 
         programCounter = 0;
         //setPCL();
-        bankOne.restart();
-        bankZero.restart();
         initialize();
     }
 
@@ -64,7 +64,7 @@ public class MicroChipController {
 
         int result;
         int twoCompliment;
-        code = command.getCommandCode();
+        lastExecutedCommand = command;
 
         switch (command.getCommandCode()) {
 
@@ -125,7 +125,7 @@ public class MicroChipController {
 
                 if (result == 0) {
 
-                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, null));
+                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, ""));
                 }
 
                 programmcounterInc();
@@ -150,7 +150,7 @@ public class MicroChipController {
 
                 if (result == 0) {
 
-                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, null));
+                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, ""));
                 }
 
                 programmcounterInc();
@@ -297,7 +297,7 @@ public class MicroChipController {
 
                 if (result == 0) {
 
-                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, null));
+                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, ""));
                 }
 
                 programmcounterInc();
@@ -309,7 +309,7 @@ public class MicroChipController {
 
                 if (result == 1) {
 
-                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, null));
+                    commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, ""));
                 }
 
                 programmcounterInc();
@@ -622,6 +622,11 @@ public class MicroChipController {
         return "MicroChipController{" + "registerW=" + registerW + "(0x" + Integer.toHexString(registerW).toUpperCase() + "),(Wert2) Register 0x0D=" + "0x" + Integer.toHexString(getCurrentBank().getRegister()[0x0D]).toUpperCase()
                 + ", (Wert1) Register 0x0C=" + "0x" + Integer.toHexString(getCurrentBank().getRegister()[0x0C]).toUpperCase() + ", programCounter=" + programCounter + ", flagC= "
                 + (bankOne.getRegister()[3] & 0x1) + ", flagDC= " + ((bankOne.getRegister()[3] & 0x2) >> 1) + ", flag0= "
-                + ((bankOne.getRegister()[3] & 0x4) >> 2) + ", BefehlsCode= " + code + '}';
+                + ((bankOne.getRegister()[3] & 0x4) >> 2) + ", BefehlsCode= " + lastExecutedCommand.getCommandCode() + '}';
+    }
+
+    public CommandLineModel getLastExecutedCommand() {
+
+        return lastExecutedCommand;
     }
 }

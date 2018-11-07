@@ -1,8 +1,11 @@
 package memoryBank;
 
 import app.Model;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import util.RegisterDataParser;
 import util.RowElement;
 import util.RowList;
 
@@ -19,13 +22,15 @@ public class MemoryBankViewModel implements Model {
 
     private ObservableList<RowElement<IRegisterView>> registerData;
 
+    private DetailStatusRegisterController detailStatusRegisterController;
+
     public MemoryBankViewModel() {
         initializeRegisters();
     }
 
     private void initializeRegisters() {
 
-        RowList<IRegisterView> register = new RowList<>();
+        /*RowList<IRegisterView> register = new RowList<>();
         final String[][] registerNames = {{"Indirect addr.", "Indirect addr."}, {"TMR0", "OPTION"},
                 {"PCL", "PCL"}, {"STATUS", "STATUS"}, {"FSR", "FSR"}, {"PORTA", "TRISA"}, {"PORTB", "TRISB"},
                 {"", ""}, {"EEDATA", "EECON1"}, {"EEADR", "EECON2"}, {"PCLATH", "PCLATH"},
@@ -50,10 +55,13 @@ public class MemoryBankViewModel implements Model {
 
             register.add(bankZero, bankOne);
 
-        }
-        registerData = FXCollections.observableArrayList(register.toList());
+        }*/
+        registerData = FXCollections.observableArrayList(RegisterDataParser.getRegisterModel(MemoryBankDataModel.getInstanceBankZero().getRegister(), MemoryBankDataModel.getInstanceBankOne().getRegister()).toList());
     }
 
+    public void setDetailStatusRegisterController(DetailStatusRegisterController detailStatusRegisterController) {
+        this.detailStatusRegisterController = detailStatusRegisterController;
+    }
 
     public void setRegisterData(ObservableList<RowElement<IRegisterView>> registerData) {
         this.registerData = registerData;
@@ -68,5 +76,13 @@ public class MemoryBankViewModel implements Model {
 
         registerData.clear();
         registerData.addAll(register.toList());
+        detailStatusRegisterController.update();
+    }
+
+    public StringProperty getStatusBit(int bitOffset) {
+
+        int statusRegister = Integer.decode(registerData.get(3).getLeftElement().nameProperty().get());
+
+        return new SimpleStringProperty(String.valueOf((statusRegister >> bitOffset) & 0x1));
     }
 }

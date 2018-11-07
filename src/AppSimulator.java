@@ -40,11 +40,14 @@ public class AppSimulator extends Application {
 
         this.primaryStage = primaryStage;
 
+        primaryStage.setOnCloseRequest(t -> System.exit(0));
+
         AnchorPane rootPane = loadRootPane();
 
         primaryStage.setScene(new Scene(rootPane, 992, 560));
         primaryStage.setTitle(APP_TITLE);
         primaryStage.show();
+
 
     }
 

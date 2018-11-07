@@ -27,6 +27,17 @@ public class CommandLineModel {
                 '}';
     }
 
+
+    public String toStringSmall() {
+        return "CommandLineModel{" +
+                "commandAdress=" + commandAdress +
+                ", commandCode=" + commandCode +
+                ", \ncommandArg=" + commandArg +
+                ", line=" + line +
+                ", label='" + label + '\'' +
+                '}';
+    }
+
     public int getCommandAdress() {
         return commandAdress;
     }
