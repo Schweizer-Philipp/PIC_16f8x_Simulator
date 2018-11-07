@@ -55,6 +55,7 @@ public class MicroChipController {
 
     public void restart() {
 
+        registerW = 0;
         programCounter = 0;
         //setPCL();
         initialize();

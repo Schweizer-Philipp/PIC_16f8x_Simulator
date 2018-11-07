@@ -1,6 +1,7 @@
 package app;
 
 import commandLine.CommandLineModel;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -33,8 +34,8 @@ public class LogFileCommandsController implements Controlable, Initializable {
 
     public void update(CommandLineModel commandLineModel) {
         logNumber++;
-        logArea.appendText(String.valueOf(logNumber) + ". " + commandLineModel.toStringSmall());
-        logArea.appendText("\n\n");
+        Platform.runLater( () -> logArea.appendText(String.valueOf(logNumber) + ". " + commandLineModel.toStringSmall()));
+        Platform.runLater(() -> logArea.appendText("\n\n"));
     }
 
     public void reset() {

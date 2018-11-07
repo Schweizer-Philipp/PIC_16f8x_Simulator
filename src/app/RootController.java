@@ -33,6 +33,9 @@ public class RootController implements Controlable, Initializable {
     private SplitPane rightInnerSplitPane;
 
     @FXML
+    private SplitPane rightBottomInnerSplitPane;
+
+    @FXML
     private AnchorPane rootAnchor;
 
     private Stage stage;
@@ -94,12 +97,18 @@ public class RootController implements Controlable, Initializable {
 
     private void loadDetailStatusRegister() {
 
-        rightInnerSplitPane.getItems().add(ViewLoader.load("/memoryBank/detailStatusRegister.fxml", stage, memoryBankViewModel, MemoryBankViewModel.class));
+
+        rightBottomInnerSplitPane.getItems().add(ViewLoader.load("/memoryBank/detailStatusRegister.fxml", stage, memoryBankViewModel, MemoryBankViewModel.class));
     }
 
     private void loadLogfile() {
 
         rightInnerSplitPane.getItems().add(ViewLoader.load("/app/logFileCommands.fxml", stage));
+    }
+
+    private void loadWRegister() {
+
+        rightBottomInnerSplitPane.getItems().add(ViewLoader.load("/memoryBank/wRegister.fxml", stage));
     }
 
     public void setStage(Stage stage) {
@@ -111,6 +120,7 @@ public class RootController implements Controlable, Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
                     rightInnerSplitPane.setDividerPositions(0.855);
+                    rightBottomInnerSplitPane.setDividerPositions(0.8);
                     observable.removeListener(this);
                 }
             }
@@ -119,24 +129,31 @@ public class RootController implements Controlable, Initializable {
 
         leftInnerSplitPane.getItems().clear();
         rightInnerSplitPane.getItems().clear();
+        rightBottomInnerSplitPane.getItems().clear();
 
         loadMicroControllerView();
         loadMemoryBankView();
 
         loadLogfile();
+        rightInnerSplitPane.getItems().add(rightBottomInnerSplitPane);
         loadDetailStatusRegister();
+        loadWRegister();
+
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         ControlsController.setMemoryBankViewModel(memoryBankViewModel);
-        leftInnerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
-        leftInnerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
+        //leftInnerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
+        //leftInnerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
         //leftInnerSplitPane.setDividerPosition(0, .1); ändert nichts
 
-        rightInnerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
-        rightInnerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
+        //rightInnerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
+        //rightInnerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
+
+        //rightBottomInnerSplitPane.maxWidthProperty().bind(rootAnchor.widthProperty().multiply(.5d));
+        //rightBottomInnerSplitPane.minWidthProperty().bind(rootAnchor.widthProperty().multiply(.125d));
 
         model.setFile(FileReader.getCurrentFile());
         selectedFile.setText(String.valueOf(model.getFile()));

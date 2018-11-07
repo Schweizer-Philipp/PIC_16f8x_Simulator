@@ -40,7 +40,7 @@ public class DetailStatusRegisterController implements Controlable, Initializabl
             final int idx = i;
             TableColumn<MemoryBankViewModel, String> column = new TableColumn<>(statusRegisterLabels[i]);
             column.setCellValueFactory(m -> m.getValue().getStatusBit(7 - idx));
-            column.prefWidthProperty().bind(registerTable.widthProperty().multiply(.125d));
+            column.prefWidthProperty().bind(registerTable.widthProperty().multiply(0.125));
             registerTable.getColumns().add(column);
         }
 

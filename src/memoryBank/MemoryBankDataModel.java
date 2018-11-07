@@ -37,5 +37,6 @@ public class MemoryBankDataModel {
 
     public void initialize() {
         //TODO Mike setzt alle werte beim anschalten
+        register = new int[80];
     }
 }
