@@ -56,8 +56,8 @@ public class MicroChipController {
 
     private void initialize() {
 
-        bankZero.initialize();
-        bankOne.initialize();
+        bankZero.initialize(true);
+        bankOne.initialize(false);
     }
 
     public void restart() {

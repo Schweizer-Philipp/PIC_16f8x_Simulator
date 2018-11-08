@@ -14,15 +14,15 @@ public class MemoryBankDataModel {
     private static MemoryBankDataModel bankZero;
     private static MemoryBankDataModel bankOne;
 
-    private MemoryBankDataModel() {
-        initialize();
+    private MemoryBankDataModel(boolean isBankZero) {
+        initialize(isBankZero);
     }
 
     public static MemoryBankDataModel getInstanceBankZero() {
 
         if (bankZero == null) {
 
-            bankZero = new MemoryBankDataModel();
+            bankZero = new MemoryBankDataModel(true);
         }
 
         return bankZero;
@@ -32,7 +32,7 @@ public class MemoryBankDataModel {
 
         if (bankOne == null) {
 
-            bankOne = new MemoryBankDataModel();
+            bankOne = new MemoryBankDataModel(false);
         }
 
         return bankOne;
@@ -42,7 +42,7 @@ public class MemoryBankDataModel {
         return register;
     }
 
-    public void initialize() {      
+    public void initialize(boolean isBankZero) {
     	
     	int[] bankZeroRegister = new int[80];
     	int[] bankOneRegister = new int[80];
@@ -53,9 +53,12 @@ public class MemoryBankDataModel {
     	bankOneRegister[5] = 31;
     	bankOneRegister[6] = 255;
     	
-        bankZero.setRegister(bankZeroRegister);
-        bankOne.setRegister(bankOneRegister);
-        
+        if(isBankZero){
+            setRegister(bankZeroRegister);
+        }
+        else{
+            setRegister(bankOneRegister);
+        }
     }
     
     private void setRegister(int[] newRegister) {
