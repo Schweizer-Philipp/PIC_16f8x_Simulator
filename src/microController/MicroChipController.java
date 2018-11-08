@@ -167,7 +167,7 @@ public class MicroChipController {
             case IORWF:
 
                 result = registerW | getRegisterValue((command.getCommandArg() & 0x7F));
-                checkZeroFlag(~result);
+                checkZeroFlag(result);
 
                 safeValueInRegister(command, result, true);
                 programmcounterInc();
