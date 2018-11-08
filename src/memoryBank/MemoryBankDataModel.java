@@ -42,8 +42,24 @@ public class MemoryBankDataModel {
         return register;
     }
 
-    public void initialize() {
-        //TODO Mike setzt alle werte beim anschalten
-        register = new int[80];
+    public void initialize() {      
+    	
+    	int[] bankZeroRegister = new int[80];
+    	int[] bankOneRegister = new int[80];
+    	
+    	bankZeroRegister[3] = 24;
+    	bankOneRegister[1] = 255;
+    	bankOneRegister[3] = 24;
+    	bankOneRegister[5] = 31;
+    	bankOneRegister[6] = 255;
+    	
+        bankZero.setRegister(bankZeroRegister);
+        bankOne.setRegister(bankOneRegister);
+        
+    }
+    
+    private void setRegister(int[] newRegister) {
+    	
+    	register = newRegister;
     }
 }
