@@ -55,7 +55,7 @@ public class RootController implements Controlable, Initializable {
             model.setFile(String.valueOf(file));
             selectedFile.setText(String.valueOf(model.getFile()));
             FileReader.setCurrentFile(model.getFile());
-            ControlsController.setCommandsForMicroController();
+            ControlsController.getInstance().setCommandsForMicroController();
             leftInnerSplitPane.getItems().clear();
 
             loadMicroControllerView();
