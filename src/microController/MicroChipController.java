@@ -33,9 +33,11 @@ public class MicroChipController {
 
     private Deque<Integer> tos;
 
+    private int cycle;
+
     private CommandLineModel lastExecutedCommand;
 
-    private int programCounter = 0; // Programm Counter
+    private int programCounter = 0;
 
     private int[] equalRegister = {0x02, 0x03, 0x04, 0x0A, 0x0B};
 
@@ -64,6 +66,7 @@ public class MicroChipController {
 
         registerW = 0;
         programCounter = 0;
+        cycle = 0;
         //setPCL();
         initialize();
     }
@@ -81,6 +84,7 @@ public class MicroChipController {
                 result = add(getRegisterValue(command.getCommandArg() & 0x7F), registerW);
 
                 safeValueInRegister(command, result, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -90,6 +94,7 @@ public class MicroChipController {
                 checkZeroFlag(result);
 
                 safeValueInRegister(command, result, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -97,6 +102,7 @@ public class MicroChipController {
 
                 setRegisterValue(0x00, command.getCommandArg(), getCurrentBank(), true);
                 checkZeroFlag(0);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -104,6 +110,7 @@ public class MicroChipController {
 
                 setRegisterValue(0x00, FLAG_REGISTER_W, null, true);
                 checkZeroFlag(0);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -112,6 +119,7 @@ public class MicroChipController {
                 result = (~getRegisterValue((command.getCommandArg() & 0x7F)) & 0xFF);
                 checkZeroFlag(result);
                 safeValueInRegister(command, result, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -122,6 +130,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true);
 
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -136,6 +145,7 @@ public class MicroChipController {
                     commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, ""));
                 }
 
+                cycle++;
                 programmcounterInc();
 
                 break;
@@ -147,6 +157,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true);
 
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -161,6 +172,7 @@ public class MicroChipController {
                     commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, ""));
                 }
 
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -170,6 +182,7 @@ public class MicroChipController {
                 checkZeroFlag(result);
 
                 safeValueInRegister(command, result, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -179,6 +192,7 @@ public class MicroChipController {
                 checkZeroFlag(result);
 
                 safeValueInRegister(command, result, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -193,6 +207,7 @@ public class MicroChipController {
                         setRegisterValue(registerW, command.getCommandArg(), getCurrentBank(), false);
                     }
                 }
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -201,6 +216,7 @@ public class MicroChipController {
                 if (command.getCommandArg() == -1)
                     commands.remove(programCounter);
 
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -217,6 +233,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true);
 
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -232,6 +249,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true);
 
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -243,6 +261,7 @@ public class MicroChipController {
                 result = add(getRegisterValue(command.getCommandArg() & 0x7F), twoCompliment);
 
                 safeValueInRegister(command, result, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -253,6 +272,7 @@ public class MicroChipController {
                 result = ((getRegisterValue(command.getCommandArg() & 0x7F) & 0xF) << 4) + tempResult;
 
                 safeValueInRegister(command, result, false);
+                cycle++;
                 programmcounterInc();
 
                 break;
@@ -263,6 +283,7 @@ public class MicroChipController {
                 checkZeroFlag(result);
 
                 safeValueInRegister(command, result, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -279,6 +300,7 @@ public class MicroChipController {
                     }
                 }
 
+                cycle++;
                 programmcounterInc();
 
                 break;
@@ -296,6 +318,7 @@ public class MicroChipController {
                     }
                 }
 
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -309,6 +332,7 @@ public class MicroChipController {
                 }
 
                 programmcounterInc();
+                cycle++;
                 break;
 
             case BTFSS:
@@ -320,6 +344,7 @@ public class MicroChipController {
                     commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, ""));
                 }
 
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -327,6 +352,7 @@ public class MicroChipController {
 
                 result = add(registerW, command.getCommandArg());
                 setRegisterValue(result, FLAG_REGISTER_W, null, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -334,6 +360,7 @@ public class MicroChipController {
 
                 registerW = registerW & command.getCommandArg();
                 checkZeroFlag(registerW);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -341,17 +368,21 @@ public class MicroChipController {
 
                 tos.push(programCounter + 1);
                 programCounter = ((getRegisterValue(10) & 0x18) << 8) + command.getCommandArg();
+                cycle = cycle + 2;
                 setPCL();
                 break;
 
             case CLRWDT:
 
                 //TODO
+                cycle++;
+                programmcounterInc();
                 break;
 
             case GOTO:
 
                 programCounter = ((getRegisterValue(10) & 0x18) << 8) + command.getCommandArg();
+                cycle = cycle + 2;
                 setPCL();
                 break;
 
@@ -359,6 +390,7 @@ public class MicroChipController {
 
                 registerW = registerW | command.getCommandArg();
                 checkZeroFlag(registerW);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -366,11 +398,14 @@ public class MicroChipController {
 
                 registerW = command.getCommandArg();
                 checkZeroFlag(registerW);
+                cycle++;
                 programmcounterInc();
                 break;
 
             case RETFIE:
 
+                cycle = cycle + 2;
+                programmcounterInc();
                 //TODO
                 break;
 
@@ -378,17 +413,21 @@ public class MicroChipController {
 
                 registerW = command.getCommandArg();
                 programCounter = tos.pop();
+                cycle = cycle + 2;
                 setPCL();
                 break;
 
             case RETURN:
 
                 programCounter = tos.pop();
+                cycle = cycle + 2;
                 setPCL();
                 break;
 
             case SLEEP:
 
+                cycle++;
+                programmcounterInc();
                 //TODO
                 break;
 
@@ -402,6 +441,7 @@ public class MicroChipController {
                 result = add(twoCompliment, command.getCommandArg());
 
                 setRegisterValue(result, FLAG_REGISTER_W, null, true);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -409,6 +449,7 @@ public class MicroChipController {
 
                 registerW = registerW ^ command.getCommandArg();
                 checkZeroFlag(registerW);
+                cycle++;
                 programmcounterInc();
                 break;
 
@@ -636,5 +677,9 @@ public class MicroChipController {
     public CommandLineModel getLastExecutedCommand() {
 
         return lastExecutedCommand;
+    }
+
+    public int getCycle() {
+        return cycle;
     }
 }

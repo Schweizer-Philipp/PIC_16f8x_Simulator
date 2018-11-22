@@ -17,28 +17,28 @@ public class PinModel {
     private SimpleIntegerProperty pinNumberProperty;
 
     private SimpleBooleanProperty statusProperty;
-    
+
     private boolean IOPin;
-    
+
     private String IOPinName;
 
-    public PinModel(String name, int nr, boolean IOPin,String IOPinName) {
-    	this.IOPin = IOPin;
-    	this.IOPinName = IOPinName;
-    	this.nameProperty = new SimpleStringProperty(name);
+    public PinModel(String name, int nr, boolean IOPin, String IOPinName) {
+        this.IOPin = IOPin;
+        this.IOPinName = IOPinName;
+        this.nameProperty = new SimpleStringProperty(name);
         this.pinNumberProperty = new SimpleIntegerProperty(nr);
         this.statusProperty = new SimpleBooleanProperty(true);
     }
 
     public boolean isIOPin() {
-		return IOPin;
-	}
+        return IOPin;
+    }
 
-	public String getIOPinName() {
-		return IOPinName;
-	}
+    public String getIOPinName() {
+        return IOPinName;
+    }
 
-	public void toggle() {
+    public void toggle() {
         this.statusProperty.set(!statusProperty.get());
     }
 
@@ -61,16 +61,16 @@ public class PinModel {
     public SimpleBooleanProperty statusProperty() {
         return statusProperty;
     }
-   
+
     public SimpleBooleanProperty getStatusProperty() {
-		return statusProperty;
-	}
+        return statusProperty;
+    }
 
-	public void setStatusProperty(SimpleBooleanProperty statusProperty) {
-		this.statusProperty = statusProperty;
-	}
+    public void setStatusProperty(SimpleBooleanProperty statusProperty) {
+        this.statusProperty = statusProperty;
+    }
 
-	public boolean isOn() {
+    public boolean isOn() {
         return statusProperty.get();
     }
 
