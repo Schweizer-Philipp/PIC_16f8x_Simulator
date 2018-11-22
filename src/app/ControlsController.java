@@ -16,7 +16,7 @@ import java.util.Objects;
  */
 public class ControlsController {
 
-    private static MicroChipController microChipController = new MicroChipController();
+    private  MicroChipController microChipController = new MicroChipController();
 
     private static ControlsController controlsController;
 
@@ -100,7 +100,7 @@ public class ControlsController {
         ControlsController.memoryBankViewModel = memoryBankViewModel;
     }
 
-    public static void setCommandsForMicroController() {
+    public void setCommandsForMicroController() {
 
         microChipController.getCommands().addAll((Objects.requireNonNull(FileReader.getCommandLineModelList())));
     }
@@ -112,4 +112,9 @@ public class ControlsController {
     public void setwRegisterController(WRegisterController wRegisterController) {
         this.wRegisterController = wRegisterController;
     }
+
+	public MicroChipController getMicroController() {
+	
+		return microChipController;
+	}
 }
