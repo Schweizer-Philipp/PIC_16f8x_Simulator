@@ -50,9 +50,12 @@ public class ControlsController {
             while (startThreadActive) {
 
                 microChipController.executeCommand(microChipController.getCommands().get(microChipController.getProgramCounter()));
-                memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
+                memoryBankViewModel.changeListData(RegisterDataParser.
+                        getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().
+                                getRegister()));
+
                 logFileCommandsController.update(microChipController.getLastExecutedCommand());
-                wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()));
+                wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()),String.valueOf(microChipController.getCycle()));
                 System.out.println(microChipController.toString());
                 try {
                     Thread.sleep(1000);
@@ -74,9 +77,11 @@ public class ControlsController {
 
         startThreadActive = false;
         microChipController.executeCommand(microChipController.getCommands().get(microChipController.getProgramCounter()));
-        memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
+        memoryBankViewModel.changeListData(RegisterDataParser.
+                getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().
+                        getRegister()));
         logFileCommandsController.update(microChipController.getLastExecutedCommand());
-        wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()));
+        wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()),String.valueOf(microChipController.getCycle()));
         System.out.println(microChipController.toString());
     }
 
@@ -84,8 +89,10 @@ public class ControlsController {
         startThreadActive = false;
         microChipController.restart();
         logFileCommandsController.reset();
-        memoryBankViewModel.changeListData(RegisterDataParser.getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().getRegister()));
-        wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()));
+        memoryBankViewModel.changeListData(RegisterDataParser.
+                getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().
+                        getRegister()));
+        wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()),String.valueOf(microChipController.getCycle()));
     }
 
     public static void setMemoryBankViewModel(MemoryBankViewModel memoryBankViewModel) {

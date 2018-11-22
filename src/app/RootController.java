@@ -138,7 +138,6 @@ public class RootController implements Controlable, Initializable {
         rightInnerSplitPane.getItems().add(rightBottomInnerSplitPane);
         loadDetailStatusRegister();
         loadWRegister();
-
     }
 
     @Override
