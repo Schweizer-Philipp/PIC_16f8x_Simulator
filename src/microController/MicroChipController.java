@@ -67,6 +67,7 @@ public class MicroChipController {
         registerW = 0;
         programCounter = 0;
         cycle = 0;
+        tos = new LinkedList<>();
         //setPCL();
         initialize();
     }

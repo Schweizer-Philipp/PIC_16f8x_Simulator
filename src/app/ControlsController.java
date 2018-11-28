@@ -102,6 +102,7 @@ public class ControlsController {
 
     public void setCommandsForMicroController() {
 
+        microChipController.getCommands().clear();
         microChipController.getCommands().addAll((Objects.requireNonNull(FileReader.getCommandLineModelList())));
     }
 
