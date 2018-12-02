@@ -15,7 +15,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import memoryBank.MemoryBankDataModel;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,10 +34,6 @@ public class MicroChipViewController implements Controlable, Initializable {
     private static final int PIN_HEIGHT = 25;
 
     private static final String PIN_LABEL_CSS = "-fx-background-color: %s; -fx-text-fill: %s; -fx-border-color: black;";
-    private static final int TRIS_A = 5;
-    private static final int TRIS_B = 6;
-    private static final int PORT_A = 5;
-    private static final int PORT_B = 6;
 
     private Stage stage;
 
@@ -61,7 +56,8 @@ public class MicroChipViewController implements Controlable, Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        model = new MicroControllerModel();
+        model = ControlsController.getInstance().getMicroControllerModel();
+        model.updateIOPins();
 
         bindPrefWidthAndHeightProperty(left, PIN_PANEL_SCALE);
         bindPrefWidthAndHeightProperty(right, PIN_PANEL_SCALE);
@@ -83,11 +79,12 @@ public class MicroChipViewController implements Controlable, Initializable {
             initializePins(row.getLeftElement());
             initializePins(row.getRightElement());
         });
+
     }
 
     private void initializePins(PinModel pin) {
         //TODO pins auf klicks sensitiv machen # alle current �nderungen merken.
-        MemoryBankDataModel bankZero = MemoryBankDataModel.getInstanceBankZero();
+       /* MemoryBankDataModel bankZero = MemoryBankDataModel.getInstanceBankZero();
         MemoryBankDataModel bankOne = MemoryBankDataModel.getInstanceBankOne();
 
         int port_a = bankZero.getRegister()[PORT_A];
@@ -98,16 +95,15 @@ public class MicroChipViewController implements Controlable, Initializable {
         port_a = port_a & 0xFF;
         port_b = port_b & 0xFF;
         tris_a = tris_a & 0xFF;
-        tris_b = tris_b & 0xFF;
+        tris_b = tris_b & 0xFF; */
 
-        for (int i = 0; i < 5; i++) {
-
-            int statusTris = (tris_a >> i) & 0x1; // isClickable
-            int statusPort = (port_a >> i) & 0x1; // high - low
-
-            pin.setStatusProperty(new SimpleBooleanProperty(statusTris == 1));
-
-        }
+//        for (int i = 0; i < 5; i++) {
+//
+//            int statusTris = (tris_a >> i) & 0x1; // isClickable
+//            int statusPort = (port_a >> i) & 0x1; // high - low
+//
+//            pin.setStatus(statusTris == 1);
+//        }
 
 
     }
@@ -166,7 +162,9 @@ public class MicroChipViewController implements Controlable, Initializable {
         labelPin.setAlignment(Pos.CENTER);
         labelPin.setMinWidth(PIN_HEIGHT);
 
-        labelPin.setOnMouseClicked(e -> pin.toggle());
+        labelPin.setOnMouseClicked(e -> { pin.toggle(); model.updatePortRegister(); });
+        //disable Pins
+        labelPin.disableProperty().bind(pin.ioPinProperty().not());
 
         HBox.setHgrow(labelName, Priority.NEVER);
 
@@ -186,8 +184,8 @@ public class MicroChipViewController implements Controlable, Initializable {
 
     private StringBinding getPinLabelStyleBinding(PinModel pin) {
         return Bindings.when(pin.statusProperty().isEqualTo(new SimpleBooleanProperty(true)))
-                .then(String.format(PIN_LABEL_CSS, "black", "white"))
-                .otherwise(String.format(PIN_LABEL_CSS, "white", "black"));
+                .then(String.format(PIN_LABEL_CSS, "red", "white"))
+                .otherwise(String.format(PIN_LABEL_CSS, "blue", "white"));
     }
 
     @Override

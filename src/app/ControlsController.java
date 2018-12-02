@@ -3,6 +3,7 @@ package app;
 import memoryBank.MemoryBankViewModel;
 import memoryBank.WRegisterController;
 import microController.MicroChipController;
+import microController.MicroControllerModel;
 import util.FileReader;
 import util.RegisterDataParser;
 
@@ -26,6 +27,8 @@ public class ControlsController {
 
     private WRegisterController wRegisterController;
 
+    private MicroControllerModel microControllerModel;
+
     private boolean startThreadActive = false;
 
     private ControlsController() {
@@ -37,6 +40,7 @@ public class ControlsController {
         if (controlsController == null) {
 
             controlsController = new ControlsController();
+            controlsController.microControllerModel  = new MicroControllerModel();
         }
 
         return controlsController;
@@ -117,5 +121,15 @@ public class ControlsController {
     public MicroChipController getMicroController() {
 
         return microChipController;
+    }
+
+    public MicroControllerModel getMicroControllerModel()
+    {
+        return microControllerModel;
+    }
+
+    public static MemoryBankViewModel getMemoryBankViewModel()
+    {
+        return memoryBankViewModel;
     }
 }

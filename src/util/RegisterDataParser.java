@@ -9,28 +9,34 @@ import memoryBank.Register;
  * Mike Bruder, Philipp Schweizer
  * 31.10.2018
  */
-public class RegisterDataParser {
+public class RegisterDataParser
+{
 
-    private static final int BANK_ZERO_START = 0x00;
-    private static final int BANK_ONE_START = 0x80;
+	 private static final int BANK_ZERO_START = 0x00;
 
-    private static int[] oldBankZero = new int[80];
-    private static int[] oldBankOne = new int[80];
+	 private static final int BANK_ONE_START = 0x80;
 
-    public static RowList<IRegisterView> getRegisterModel(int[] bankZero, int[] bankOne) {
+	 private static int[] oldBankZero = new int[80];
 
-        RowList<IRegisterView> rowList = new RowList<>();
+	 private static int[] oldBankOne = new int[80];
 
-        for (int i = 0; i < bankOne.length; i++) {
+	 public static RowList<IRegisterView> getRegisterModel(int[] bankZero, int[] bankOne)
+	 {
 
-            rowList.add(new Register((BANK_ZERO_START + i), "0x" + Integer.toHexString(bankZero[i]), bankZero[i] != oldBankZero[i]),
-                    new Register((BANK_ONE_START + i), "0x" + Integer.toHexString(bankOne[i]), bankOne[i] != oldBankOne[i]));
+		  RowList<IRegisterView> rowList = new RowList<>();
 
-        }
+		  for (int i = 0; i < bankOne.length; i++) {
 
-        oldBankZero = bankZero;
-        oldBankOne = bankOne;
+				rowList.add(new Register((BANK_ZERO_START + i), "0x" + Integer.toHexString(bankZero[i]),
+								bankZero[i] != oldBankZero[i]),
+						new Register((BANK_ONE_START + i), "0x" + Integer.toHexString(bankOne[i]),
+								bankOne[i] != oldBankOne[i]));
 
-        return rowList;
-    }
+		  }
+
+		  oldBankZero = bankZero;
+		  oldBankOne = bankOne;
+
+		  return rowList;
+	 }
 }
