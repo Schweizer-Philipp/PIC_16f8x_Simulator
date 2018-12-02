@@ -47,18 +47,15 @@ public class PinModel {
     }
 
 
-    public SimpleBooleanProperty statusProperty()
-    {
+    public SimpleBooleanProperty statusProperty() {
         return statusProperty;
     }
 
-    public SimpleBooleanProperty ioPinProperty()
-    {
+    public SimpleBooleanProperty ioPinProperty() {
         return ioPinProperty;
     }
 
-    public void setIoPinProperty(boolean ioPinProperty)
-    {
+    public void setIoPinProperty(boolean ioPinProperty) {
         this.ioPinProperty.set(ioPinProperty);
     }
 

@@ -40,7 +40,7 @@ public class ControlsController {
         if (controlsController == null) {
 
             controlsController = new ControlsController();
-            controlsController.microControllerModel  = new MicroControllerModel();
+            controlsController.microControllerModel = new MicroControllerModel();
         }
 
         return controlsController;
@@ -123,13 +123,11 @@ public class ControlsController {
         return microChipController;
     }
 
-    public MicroControllerModel getMicroControllerModel()
-    {
+    public MicroControllerModel getMicroControllerModel() {
         return microControllerModel;
     }
 
-    public static MemoryBankViewModel getMemoryBankViewModel()
-    {
+    public static MemoryBankViewModel getMemoryBankViewModel() {
         return memoryBankViewModel;
     }
 }

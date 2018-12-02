@@ -1,10 +1,6 @@
 package microController;
 
 import app.ControlsController;
-import com.sun.javaws.exceptions.InvalidArgumentException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import memoryBank.IRegisterView;
 import memoryBank.MemoryBankDataModel;
 import util.RegisterDataParser;
 import util.RowElement;
@@ -19,146 +15,139 @@ import java.util.stream.Collectors;
  * Mike Bruder, Philipp Schweizer
  * 27.10.2018
  */
-public class MicroControllerModel
-{
+public class MicroControllerModel {
 
-	 private static final int TRIS_A = 5;
+    private static final int TRIS_A = 5;
 
-	 private static final int TRIS_B = 6;
+    private static final int TRIS_B = 6;
 
-	 private static final int PORT_A = 5;
+    private static final int PORT_A = 5;
 
-	 private static final int PORT_B = 6;
+    private static final int PORT_B = 6;
 
-	 private RowList<PinModel> pins;
+    private RowList<PinModel> pins;
 
-	 public MicroControllerModel()
-	 {
-		  this.pins = new RowList<>();
-		  initializePins();
-	 }
+    public MicroControllerModel() {
+        this.pins = new RowList<>();
+        initializePins();
+    }
 
-	 private void initializePins()
-	 {
-		  final String[][] pinNames = { { "RA2 <-->", "<--> RA1" }, { "RA3 <-->", "<--> RA0" },
-				  { "RA4/T0CKI <-->", "<--- OSC1/CLKIN" },
+    private void initializePins() {
+        final String[][] pinNames = {{"RA2 <-->", "<--> RA1"}, {"RA3 <-->", "<--> RA0"},
+                {"RA4/T0CKI <-->", "<--- OSC1/CLKIN"},
 
-				  { "MCLR --->", "---> OSC2/CLKOUT" }, { "Vss --->", "<--- Vdd" }, { "RB0/INT <-->", "<--> RB7" },
+                {"MCLR --->", "---> OSC2/CLKOUT"}, {"Vss --->", "<--- Vdd"}, {"RB0/INT <-->", "<--> RB7"},
 
-				  { "RB1 <-->", "<--> RB6" }, { "RB2 <-->", "<--> RB5" }, { "RB3 <-->", "<--> RB4" }, };
+                {"RB1 <-->", "<--> RB6"}, {"RB2 <-->", "<--> RB5"}, {"RB3 <-->", "<--> RB4"},};
 
-		  PinModel leftPin = new PinModel(pinNames[0][0], 1, true, "RA2");
-		  PinModel rightPin = new PinModel(pinNames[0][1], 18, true, "RA1");
-		  pins.add(leftPin, rightPin);
+        PinModel leftPin = new PinModel(pinNames[0][0], 1, true, "RA2");
+        PinModel rightPin = new PinModel(pinNames[0][1], 18, true, "RA1");
+        pins.add(leftPin, rightPin);
 
-		  leftPin = new PinModel(pinNames[1][0], 2, true, "RA3");
-		  rightPin = new PinModel(pinNames[1][1], 17, true, "RA0");
-		  pins.add(leftPin, rightPin);
+        leftPin = new PinModel(pinNames[1][0], 2, true, "RA3");
+        rightPin = new PinModel(pinNames[1][1], 17, true, "RA0");
+        pins.add(leftPin, rightPin);
 
-		  leftPin = new PinModel(pinNames[2][0], 3, true, "RA4");
-		  rightPin = new PinModel(pinNames[2][1], 16, false, null);
-		  pins.add(leftPin, rightPin);
+        leftPin = new PinModel(pinNames[2][0], 3, true, "RA4");
+        rightPin = new PinModel(pinNames[2][1], 16, false, null);
+        pins.add(leftPin, rightPin);
 
-		  leftPin = new PinModel(pinNames[3][0], 4, false, null);
-		  rightPin = new PinModel(pinNames[3][1], 15, false, null);
-		  pins.add(leftPin, rightPin);
+        leftPin = new PinModel(pinNames[3][0], 4, false, null);
+        rightPin = new PinModel(pinNames[3][1], 15, false, null);
+        pins.add(leftPin, rightPin);
 
-		  leftPin = new PinModel(pinNames[4][0], 5, false, null);
-		  rightPin = new PinModel(pinNames[4][1], 14, false, null);
-		  pins.add(leftPin, rightPin);
+        leftPin = new PinModel(pinNames[4][0], 5, false, null);
+        rightPin = new PinModel(pinNames[4][1], 14, false, null);
+        pins.add(leftPin, rightPin);
 
-		  leftPin = new PinModel(pinNames[5][0], 6, true, "RB0");
-		  rightPin = new PinModel(pinNames[5][1], 13, true, "RB7");
-		  pins.add(leftPin, rightPin);
+        leftPin = new PinModel(pinNames[5][0], 6, true, "RB0");
+        rightPin = new PinModel(pinNames[5][1], 13, true, "RB7");
+        pins.add(leftPin, rightPin);
 
-		  leftPin = new PinModel(pinNames[6][0], 7, true, "RB1");
-		  rightPin = new PinModel(pinNames[6][1], 12, true, "RB6");
-		  pins.add(leftPin, rightPin);
+        leftPin = new PinModel(pinNames[6][0], 7, true, "RB1");
+        rightPin = new PinModel(pinNames[6][1], 12, true, "RB6");
+        pins.add(leftPin, rightPin);
 
-		  leftPin = new PinModel(pinNames[7][0], 8, true, "RB2");
-		  rightPin = new PinModel(pinNames[7][1], 11, true, "RB5");
-		  pins.add(leftPin, rightPin);
+        leftPin = new PinModel(pinNames[7][0], 8, true, "RB2");
+        rightPin = new PinModel(pinNames[7][1], 11, true, "RB5");
+        pins.add(leftPin, rightPin);
 
-		  leftPin = new PinModel(pinNames[8][0], 9, true, "RB3");
-		  rightPin = new PinModel(pinNames[8][1], 10, true, "RB4");
-		  pins.add(leftPin, rightPin);
+        leftPin = new PinModel(pinNames[8][0], 9, true, "RB3");
+        rightPin = new PinModel(pinNames[8][1], 10, true, "RB4");
+        pins.add(leftPin, rightPin);
 
-	 }
+    }
 
-	 public RowList<PinModel> getPins()
-	 {
-		  return pins;
-	 }
+    public RowList<PinModel> getPins() {
+        return pins;
+    }
 
-	 public PinModel getIOPin(int index, String letter)
-	 {
+    public PinModel getIOPin(int index, String letter) {
 
-		  String search = "R" + letter + index;
+        String search = "R" + letter + index;
 
-		  List<PinModel> listOfPins = pins.stream().map(RowElement::getRightElement).filter(PinModel::isIOPin)
-				  .collect(Collectors.toList());
-		  listOfPins.addAll(
-				  pins.stream().map(RowElement::getLeftElement).filter(PinModel::isIOPin).collect(Collectors.toList()));
+        List<PinModel> listOfPins = pins.stream().map(RowElement::getRightElement).filter(PinModel::isIOPin)
+                .collect(Collectors.toList());
+        listOfPins.addAll(
+                pins.stream().map(RowElement::getLeftElement).filter(PinModel::isIOPin).collect(Collectors.toList()));
 
-		  return listOfPins.stream().filter(p -> p.getName().contains(search)).findFirst().get();
-	 }
+        return listOfPins.stream().filter(p -> p.getName().contains(search)).findFirst().get();
+    }
 
-	 public void updateIOPins()
-	 {
-		  MemoryBankDataModel bankZero = MemoryBankDataModel.getInstanceBankZero();
-		  MemoryBankDataModel bankOne = MemoryBankDataModel.getInstanceBankOne();
+    public void updateIOPins() {
+        MemoryBankDataModel bankZero = MemoryBankDataModel.getInstanceBankZero();
+        MemoryBankDataModel bankOne = MemoryBankDataModel.getInstanceBankOne();
 
-		  int port_a = bankZero.getRegister()[PORT_A];
-		  int port_b = bankZero.getRegister()[PORT_B];
-		  int tris_a = bankOne.getRegister()[TRIS_A];
-		  int tris_b = bankOne.getRegister()[TRIS_B];
+        int port_a = bankZero.getRegister()[PORT_A];
+        int port_b = bankZero.getRegister()[PORT_B];
+        int tris_a = bankOne.getRegister()[TRIS_A];
+        int tris_b = bankOne.getRegister()[TRIS_B];
 
-		  port_a = port_a & 0xFF;
-		  port_b = port_b & 0xFF;
-		  tris_a = tris_a & 0xFF;
-		  tris_b = tris_b & 0xFF;
+        port_a = port_a & 0xFF;
+        port_b = port_b & 0xFF;
+        tris_a = tris_a & 0xFF;
+        tris_b = tris_b & 0xFF;
 
-		  //TRIS_A & PORT_A Register
-		  for (int i = 0; i < 5; i++) {
-				PinModel model = getIOPin(i, "A");
-				model.setIoPinProperty(((tris_a >> i) & 0x1) == 1);
-				model.setStatus(((port_a >> i) & 0x1) == 1);
-		  }
-		  //TRIS_B & PORT_B Register
-		  for (int i = 0; i < 8; i++) {
-				PinModel model = getIOPin(i, "B");
-				model.setIoPinProperty(((tris_b >> i) & 0x1) == 1);
-				model.setStatus(((port_b >> i) & 0x1) == 1);
-		  }
+        //TRIS_A & PORT_A Register
+        for (int i = 0; i < 5; i++) {
+            PinModel model = getIOPin(i, "A");
+            model.setIoPinProperty(((tris_a >> i) & 0x1) == 1);
+            model.setStatus(((port_a >> i) & 0x1) == 1);
+        }
+        //TRIS_B & PORT_B Register
+        for (int i = 0; i < 8; i++) {
+            PinModel model = getIOPin(i, "B");
+            model.setIoPinProperty(((tris_b >> i) & 0x1) == 1);
+            model.setStatus(((port_b >> i) & 0x1) == 1);
+        }
 
-		  ControlsController.getMemoryBankViewModel()
-				  .changeListData(RegisterDataParser.getRegisterModel(bankZero.getRegister(), bankOne.getRegister()));
+        ControlsController.getMemoryBankViewModel()
+                .changeListData(RegisterDataParser.getRegisterModel(bankZero.getRegister(), bankOne.getRegister()));
 
-	 }
+    }
 
-	 public void updatePortRegister()
-	 {
-		  MemoryBankDataModel bankZero = MemoryBankDataModel.getInstanceBankZero();
-		  int newPortA = 0; // 00000
-		  int newPortB = 0; // 00000
+    public void updatePortRegister() {
+        MemoryBankDataModel bankZero = MemoryBankDataModel.getInstanceBankZero();
+        int newPortA = 0; // 00000
+        int newPortB = 0; // 00000
 
-		  for (int i = 0; i < 5; i++) {
-				PinModel model = getIOPin(i, "A");
-				if (model.isOn()) {
-					 newPortA |= (1 << i);
-				}
-		  }
-		  bankZero.getRegister()[PORT_A] = newPortA;
+        for (int i = 0; i < 5; i++) {
+            PinModel model = getIOPin(i, "A");
+            if (model.isOn()) {
+                newPortA |= (1 << i);
+            }
+        }
+        bankZero.getRegister()[PORT_A] = newPortA;
 
-		  for (int i = 0; i < 8; i++) {
-				PinModel model = getIOPin(i, "B");
-				if (model.isOn()) {
-					 newPortB |= (1 << i);
-				}
-		  }
-		  bankZero.getRegister()[PORT_B] = newPortB;
+        for (int i = 0; i < 8; i++) {
+            PinModel model = getIOPin(i, "B");
+            if (model.isOn()) {
+                newPortB |= (1 << i);
+            }
+        }
+        bankZero.getRegister()[PORT_B] = newPortB;
 
-		  ControlsController.getMemoryBankViewModel().changeListData(RegisterDataParser
-				  .getRegisterModel(bankZero.getRegister(), MemoryBankDataModel.getInstanceBankOne().getRegister()));
-	 }
+        ControlsController.getMemoryBankViewModel().changeListData(RegisterDataParser
+                .getRegisterModel(bankZero.getRegister(), MemoryBankDataModel.getInstanceBankOne().getRegister()));
+    }
 }

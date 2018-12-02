@@ -162,7 +162,10 @@ public class MicroChipViewController implements Controlable, Initializable {
         labelPin.setAlignment(Pos.CENTER);
         labelPin.setMinWidth(PIN_HEIGHT);
 
-        labelPin.setOnMouseClicked(e -> { pin.toggle(); model.updatePortRegister(); });
+        labelPin.setOnMouseClicked(e -> {
+            pin.toggle();
+            model.updatePortRegister();
+        });
         //disable Pins
         labelPin.disableProperty().bind(pin.ioPinProperty().not());
 
