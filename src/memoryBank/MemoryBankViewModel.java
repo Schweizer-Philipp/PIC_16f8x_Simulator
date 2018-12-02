@@ -15,20 +15,23 @@ import util.RowList;
  * Mike Bruder, Philipp Schweizer
  * 27.10.2018
  */
-public class MemoryBankViewModel implements Model {
-    private static final int REGISTER_AMOUNT = 0x50;
+public class MemoryBankViewModel implements Model
+{
+	 private static final int REGISTER_AMOUNT = 0x50;
 
-    private static final int REGISTER_PADDING = 0x80;
+	 private static final int REGISTER_PADDING = 0x80;
 
-    private ObservableList<RowElement<IRegisterView>> registerData;
+	 private ObservableList<RowElement<IRegisterView>> registerData;
 
-    private DetailStatusRegisterController detailStatusRegisterController;
+	 private DetailStatusRegisterController detailStatusRegisterController;
 
-    public MemoryBankViewModel() {
-        initializeRegisters();
-    }
+	 public MemoryBankViewModel()
+	 {
+		  initializeRegisters();
+	 }
 
-    private void initializeRegisters() {
+	 private void initializeRegisters()
+	 {
 
         /*RowList<IRegisterView> register = new RowList<>();
         final String[][] registerNames = {{"Indirect addr.", "Indirect addr."}, {"TMR0", "OPTION"},
@@ -56,33 +59,43 @@ public class MemoryBankViewModel implements Model {
             register.add(bankZero, bankOne);
 
         }*/
-        registerData = FXCollections.observableArrayList(RegisterDataParser.getRegisterModel(MemoryBankDataModel.getInstanceBankZero().getRegister(), MemoryBankDataModel.getInstanceBankOne().getRegister()).toList());
-    }
+		  registerData = FXCollections.observableArrayList(RegisterDataParser
+				  .getRegisterModel(MemoryBankDataModel.getInstanceBankZero().getRegister(),
+						  MemoryBankDataModel.getInstanceBankOne().getRegister()).toList());
+	 }
 
-    public void setDetailStatusRegisterController(DetailStatusRegisterController detailStatusRegisterController) {
-        this.detailStatusRegisterController = detailStatusRegisterController;
-    }
+	 public void setDetailStatusRegisterController(DetailStatusRegisterController detailStatusRegisterController)
+	 {
+		  this.detailStatusRegisterController = detailStatusRegisterController;
+	 }
 
-    public void setRegisterData(ObservableList<RowElement<IRegisterView>> registerData) {
-        this.registerData = registerData;
-    }
+	 public void setRegisterData(ObservableList<RowElement<IRegisterView>> registerData)
+	 {
+		  this.registerData = registerData;
+	 }
 
-    public ObservableList<RowElement<IRegisterView>> getRegisterData() {
+	 public ObservableList<RowElement<IRegisterView>> getRegisterData()
+	 {
 
-        return registerData;
-    }
+		  return registerData;
+	 }
 
-    public void changeListData(RowList<IRegisterView> register) {
+	 public void changeListData(RowList<IRegisterView> register)
+	 {
 
-        registerData.clear();
-        registerData.addAll(register.toList());
-        detailStatusRegisterController.update();
-    }
+		  registerData.clear();
+		  registerData.addAll(register.toList());
 
-    public StringProperty getStatusBit(int bitOffset) {
+		  if (detailStatusRegisterController != null) {
+				detailStatusRegisterController.update();
+		  }
+	 }
 
-        int statusRegister = Integer.decode(registerData.get(3).getLeftElement().nameProperty().get());
+	 public StringProperty getStatusBit(int bitOffset)
+	 {
 
-        return new SimpleStringProperty(String.valueOf((statusRegister >> bitOffset) & 0x1));
-    }
+		  int statusRegister = Integer.decode(registerData.get(3).getLeftElement().nameProperty().get());
+
+		  return new SimpleStringProperty(String.valueOf((statusRegister >> bitOffset) & 0x1));
+	 }
 }

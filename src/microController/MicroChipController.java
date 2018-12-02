@@ -683,4 +683,9 @@ public class MicroChipController {
     public int getCycle() {
         return cycle;
     }
+
+    /*
+        ControsController.getInstance().getMicroControllerModel().updateIOPins();
+
+     */
 }
