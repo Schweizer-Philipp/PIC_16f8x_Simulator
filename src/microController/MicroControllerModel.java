@@ -127,9 +127,13 @@ public class MicroControllerModel {
     }
 
     public void updatePortRegister() {
+
+        checkTimer0();
+
         MemoryBankDataModel bankZero = MemoryBankDataModel.getInstanceBankZero();
         int newPortA = 0; // 00000
         int newPortB = 0; // 00000
+
 
         for (int i = 0; i < 5; i++) {
             PinModel model = getIOPin(i, "A");
@@ -149,5 +153,12 @@ public class MicroControllerModel {
 
         ControlsController.getMemoryBankViewModel().changeListData(RegisterDataParser
                 .getRegisterModel(bankZero.getRegister(), MemoryBankDataModel.getInstanceBankOne().getRegister()));
+
+    }
+
+    private void checkTimer0() {
+
+        // TODO timer 0 bei RA4
+        MemoryBankDataModel.getInstanceBankOne();
     }
 }

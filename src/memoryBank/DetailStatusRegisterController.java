@@ -41,7 +41,7 @@ public class DetailStatusRegisterController implements Controlable, Initializabl
 
         registerTable.getColumns().clear();
 
-        final String[] statusRegisterLabels = {"IRP", "RP1", "RP0", "T0", "PD", "Z", "DC", "D"};
+        final String[] statusRegisterLabels = {"IRP", "RP1", "RP0", "T0", "PD", "Z", "DC", "C"};
         for (int i = 0; i < statusRegisterLabels.length; i++) {
 
             final int idx = i;
