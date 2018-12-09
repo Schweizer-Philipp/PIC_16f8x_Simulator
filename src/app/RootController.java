@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
@@ -12,7 +13,8 @@ import javafx.stage.Stage;
 import memoryBank.MemoryBankViewModel;
 import util.FileReader;
 
-import java.io.File;
+import java.awt.*;
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -85,6 +87,52 @@ public class RootController implements Controlable, Initializable {
     @FXML
     public void handleRestartEvent() {
         ControlsController.getInstance().restart();
+    }
+
+    @FXML
+    public void handleDatasheet() {
+
+        openPdf("datasheet.pdf");
+    }
+
+    @FXML
+    public void handleTeam(){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Team");
+        alert.setHeaderText(null);
+        alert.setContentText("Created by Mike Bruder and Philipp Schweizer");
+
+        alert.showAndWait();
+    }
+
+    private void openPdf(String filename){
+
+        if (Desktop.isDesktopSupported()) {
+            File file = new File(RootController.class.getResource("/pdf/"+filename).getFile());
+            if (!file.exists()) {
+                try {
+                    try (InputStream is = getClass().getResourceAsStream("./"+filename);
+                         OutputStream os = new FileOutputStream(file)) {
+
+                        byte[] buffer = new byte[1024];
+                        int length;
+                        while ((length = is.read(buffer)) > 0) {
+                            os.write(buffer, 0, length);
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     private void loadMicroControllerView() {

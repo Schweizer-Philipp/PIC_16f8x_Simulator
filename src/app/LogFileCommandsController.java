@@ -2,12 +2,19 @@ package app;
 
 import commandLine.CommandLineModel;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -20,11 +27,36 @@ import java.util.ResourceBundle;
 public class LogFileCommandsController implements Controlable, Initializable {
 
     private Stage stage;
-
-    private static int logNumber = 0;
-
     @FXML
-    private TextArea logArea;
+    private TableView<String> tableView;
+    @FXML
+    private TableColumn<String, String> columnText;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        ControlsController.getInstance().setLogFileCommandsController(this);
+        columnText = new TableColumn<>();
+        columnText.setCellValueFactory(value -> new SimpleStringProperty(value.getValue()));
+        tableView.getColumns().add(columnText);
+        tableView.setRowFactory(createRowFactory());
+
+    }
+
+    public void jumpToRow(int row) {
+
+        if(row == -1){
+
+            tableView.scrollTo(tableView.getItems().size()-1);
+            tableView.getSelectionModel().select(tableView.getItems().size()-1);
+        }
+        else{
+
+            tableView.scrollTo(row);
+            tableView.getSelectionModel().select(row);
+        }
+
+    }
 
     @Override
     public void setStage(Stage stage) {
@@ -32,23 +64,21 @@ public class LogFileCommandsController implements Controlable, Initializable {
         this.stage = stage;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void setList(List<String> newList){
 
-        ControlsController.getInstance().setLogFileCommandsController(this);
-        logArea.textProperty().addListener((obs, oldVal, newVal) -> logArea.setScrollTop(Double.MAX_VALUE));
+        tableView.getItems().clear();
+        tableView.getItems().addAll(newList);
+        jumpToRow(0);
     }
 
-    public void update(CommandLineModel commandLineModel) {
-        logNumber++;
-        Platform.runLater(() -> logArea.appendText(String.valueOf(logNumber) + ". " + commandLineModel.toStringSmall()));
-        Platform.runLater(() -> logArea.appendText("\n\n"));
+    private Callback<TableView<String>, TableRow<String>> createRowFactory()
+    {
+        return view -> createRowWithClickListener();
     }
 
-    public void reset() {
-
-        logNumber = 0;
-        logArea.clear();
+    private TableRow<String> createRowWithClickListener() {
+        TableRow<String> row = new TableRow<>();
+        row.setPrefHeight(50);
+        return row;
     }
-
 }

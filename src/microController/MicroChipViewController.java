@@ -75,47 +75,8 @@ public class MicroChipViewController implements Controlable, Initializable {
 
         microChipController = ControlsController.getInstance().getMicroController();
 
-        model.getPins().stream().forEach(row -> {
-            initializePins(row.getLeftElement());
-            initializePins(row.getRightElement());
-        });
-
     }
 
-    private void initializePins(PinModel pin) {
-        //TODO pins auf klicks sensitiv machen # alle current �nderungen merken.
-       /* MemoryBankDataModel bankZero = MemoryBankDataModel.getInstanceBankZero();
-        MemoryBankDataModel bankOne = MemoryBankDataModel.getInstanceBankOne();
-
-        int port_a = bankZero.getRegister()[PORT_A];
-        int port_b = bankZero.getRegister()[PORT_B];
-        int tris_a = bankOne.getRegister()[TRIS_A];
-        int tris_b = bankOne.getRegister()[TRIS_B];
-
-        port_a = port_a & 0xFF;
-        port_b = port_b & 0xFF;
-        tris_a = tris_a & 0xFF;
-        tris_b = tris_b & 0xFF; */
-
-//        for (int i = 0; i < 5; i++) {
-//
-//            int statusTris = (tris_a >> i) & 0x1; // isClickable
-//            int statusPort = (port_a >> i) & 0x1; // high - low
-//
-//            pin.setStatus(statusTris == 1);
-//        }
-
-
-    }
-
-    public void dataHasChanged() {
-        // TODO change pins
-    }
-
-    public void changeDataToTheCurrentStatus() {
-
-
-    }
 
     private void bindPrefWidthAndHeightProperty(Pane pane, double scale) {
         pane.prefWidthProperty().bind(parent.widthProperty().multiply(scale));

@@ -42,7 +42,7 @@ public class CommandLineModel {
                 ", \ncommandArg=" + commandArg +
                 ", line=" + line +
                 ", label='" + label + '\'' +
-                '}';
+                "}\n";
     }
 
     public int getCommandAdress() {

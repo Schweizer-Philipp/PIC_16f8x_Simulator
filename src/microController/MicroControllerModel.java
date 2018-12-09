@@ -1,6 +1,7 @@
 package microController;
 
 import app.ControlsController;
+import memoryBank.MemoryBankController;
 import memoryBank.MemoryBankDataModel;
 import util.RegisterDataParser;
 import util.RowElement;
@@ -158,7 +159,43 @@ public class MicroControllerModel {
 
     private void checkTimer0() {
 
-        // TODO timer 0 bei RA4
-        MemoryBankDataModel.getInstanceBankOne();
+        if(isPinInput()){
+
+            if(didPinChange()){
+
+                if(rightEdge()){
+
+                    ControlsController.getInstance().getMicroController().IncTimer0(1);
+                }
+            }
+        }
+    }
+
+    private boolean rightEdge() {
+
+        int TOSE = (MemoryBankDataModel.getInstanceBankOne().getRegister()[1] & 0x10) >> 4;
+
+        int newValue = (getIOPin(4, "A").isOn()) ? 1 : 0;
+
+        // 1 1 -> 0 = true
+        // 0 0->  1 = true
+
+        return TOSE != newValue;
+    }
+
+    private boolean didPinChange() {
+
+        int oldValue = (MemoryBankDataModel.getInstanceBankZero().getRegister()[PORT_A] & 0x10) >> 4;
+
+        int newValue = (getIOPin(4, "A").isOn()) ? 1 : 0;
+
+        return oldValue != newValue;
+    }
+
+    private boolean isPinInput() {
+
+        int tris_a = (MemoryBankDataModel.getInstanceBankOne().getRegister()[TRIS_A] & 0x10) >> 4;
+
+        return tris_a == 1;
     }
 }

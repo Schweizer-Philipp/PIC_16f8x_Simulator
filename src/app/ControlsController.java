@@ -1,5 +1,7 @@
 package app;
 
+import commandLine.CommandCode;
+import commandLine.CommandLineModel;
 import memoryBank.MemoryBankViewModel;
 import memoryBank.WRegisterController;
 import microController.MicroChipController;
@@ -7,7 +9,9 @@ import microController.MicroControllerModel;
 import util.FileReader;
 import util.RegisterDataParser;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * hso.ra.java.simulator.pic16f8x
@@ -58,7 +62,7 @@ public class ControlsController {
                         getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().
                                 getRegister()));
 
-                logFileCommandsController.update(microChipController.getLastExecutedCommand());
+                logFileCommandsController.jumpToRow(microChipController.getNextCommandAsInt());
                 wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()), String.valueOf(microChipController.getCycle()));
                 System.out.println(microChipController.toString());
                 try {
@@ -84,7 +88,7 @@ public class ControlsController {
         memoryBankViewModel.changeListData(RegisterDataParser.
                 getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().
                         getRegister()));
-        logFileCommandsController.update(microChipController.getLastExecutedCommand());
+        logFileCommandsController.jumpToRow(microChipController.getNextCommandAsInt());
         wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()), String.valueOf(microChipController.getCycle()));
         System.out.println(microChipController.toString());
     }
@@ -92,7 +96,7 @@ public class ControlsController {
     public void restart() {
         startThreadActive = false;
         microChipController.restart();
-        logFileCommandsController.reset();
+        logFileCommandsController.jumpToRow(0);
         memoryBankViewModel.changeListData(RegisterDataParser.
                 getRegisterModel(microChipController.getBankZero().getRegister(), microChipController.getBankOne().
                         getRegister()));
@@ -108,10 +112,19 @@ public class ControlsController {
 
         microChipController.getCommands().clear();
         microChipController.getCommands().addAll((Objects.requireNonNull(FileReader.getCommandLineModelList())));
+        if(logFileCommandsController != null){
+
+            List<String> list = microChipController.getCommands().stream().map(command -> command.toStringSmall()).collect(Collectors.toList());
+            list.add(list.size(),new CommandLineModel(0, CommandCode.NOP, -1, 0, "").toStringSmall());
+            logFileCommandsController.setList(list);
+        }
     }
 
     public void setLogFileCommandsController(LogFileCommandsController logFileCommandsController) {
         this.logFileCommandsController = logFileCommandsController;
+        List<String> list = microChipController.getCommands().stream().map(command -> command.toStringSmall()).collect(Collectors.toList());
+        list.add(list.size(),new CommandLineModel(0, CommandCode.NOP, -1, 0, "").toStringSmall());
+        logFileCommandsController.setList(list);
     }
 
     public void setwRegisterController(WRegisterController wRegisterController) {

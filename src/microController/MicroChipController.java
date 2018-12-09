@@ -490,25 +490,24 @@ public class MicroChipController {
         IncTimer0(0);
     }
 
-    private void IncTimer0(int source){
+    public void IncTimer0(int source) {
 
-        int T0CS = bankOne.getRegister()[1] & 0x10 >> 5;
-        int PSA = bankOne.getRegister()[1] & 0xF;
-        int prescaler = ((bankOne.getRegister()[1] & 0x7) +1) << (bankOne.getRegister()[1] & 0x7);
+        int T0CS = bankOne.getRegister()[1] & 0x20 >> 5;
+        int PSA = bankOne.getRegister()[1] & 0xF >> 3;
+        int prescaler = 2 << ((bankOne.getRegister()[1] & 0x7));
 
-        if(T0CS == source){
+        if (T0CS == source) {
 
             safedTimer0Impulsed++;
 
-            if(PSA == 0){
+            if (PSA == 0) {
 
-                if((prescaler/safedTimer0Impulsed) == 0){
+                if ((prescaler / safedTimer0Impulsed) == 0) {
 
                     safedTimer0Impulsed = 0;
                 }
                 setUpTimer0();
-            }
-            else {
+            } else {
 
                 safedTimer0Impulsed = 0;
                 setUpTimer0();
@@ -521,10 +520,10 @@ public class MicroChipController {
         int currentTimer0 = bankZero.getRegister()[1];
         currentTimer0++;
 
-        if(currentTimer0> 0xFF){
+        if (currentTimer0 > 0xFF) {
 
-            setBit(11,2,bankZero);
-            setBit(11,2,bankOne);
+            setBit(11, 2, bankZero);
+            setBit(11, 2, bankOne);
         }
 
         bankZero.getRegister()[1] = currentTimer0 & 0xFF;
@@ -633,7 +632,7 @@ public class MicroChipController {
                     programCounter = (getRegisterValue(10) << 8) + getRegisterValue(2);
                 } else {
 
-                    if(register == 5 || register == 6){
+                    if (register == 5 || register == 6) {
 
                         ControlsController.getInstance().getMicroControllerModel().updateIOPins();
                     }
@@ -726,9 +725,13 @@ public class MicroChipController {
                 + ((bankOne.getRegister()[3] & 0x4) >> 2) + ", BefehlsCode= " + lastExecutedCommand.getCommandCode() + '}';
     }
 
-    public CommandLineModel getLastExecutedCommand() {
+    public int getNextCommandAsInt() {
 
-        return lastExecutedCommand;
+        if(getCommands().get(programCounter).getCommandArg() == -1){
+
+            return -1;
+        }
+        return programCounter;
     }
 
     public int getCycle() {

@@ -44,7 +44,7 @@ public class AppSimulator extends Application {
 
         AnchorPane rootPane = loadRootPane();
 
-        primaryStage.setScene(new Scene(rootPane, 992, 560));
+        primaryStage.setScene(new Scene(rootPane, 1100, 560));
         primaryStage.setTitle(APP_TITLE);
         primaryStage.show();
 
