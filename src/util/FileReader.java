@@ -1,6 +1,5 @@
 package util;
 
-import app.ControlsController;
 import commandLine.CommandLineModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

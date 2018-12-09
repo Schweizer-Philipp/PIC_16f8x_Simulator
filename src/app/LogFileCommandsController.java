@@ -1,15 +1,11 @@
 package app;
 
-import commandLine.CommandLineModel;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -45,12 +41,11 @@ public class LogFileCommandsController implements Controlable, Initializable {
 
     public void jumpToRow(int row) {
 
-        if(row == -1){
+        if (row == -1) {
 
-            tableView.scrollTo(tableView.getItems().size()-1);
-            tableView.getSelectionModel().select(tableView.getItems().size()-1);
-        }
-        else{
+            tableView.scrollTo(tableView.getItems().size() - 1);
+            tableView.getSelectionModel().select(tableView.getItems().size() - 1);
+        } else {
 
             tableView.scrollTo(row);
             tableView.getSelectionModel().select(row);
@@ -64,15 +59,14 @@ public class LogFileCommandsController implements Controlable, Initializable {
         this.stage = stage;
     }
 
-    public void setList(List<String> newList){
+    public void setList(List<String> newList) {
 
         tableView.getItems().clear();
         tableView.getItems().addAll(newList);
         jumpToRow(0);
     }
 
-    private Callback<TableView<String>, TableRow<String>> createRowFactory()
-    {
+    private Callback<TableView<String>, TableRow<String>> createRowFactory() {
         return view -> createRowWithClickListener();
     }
 

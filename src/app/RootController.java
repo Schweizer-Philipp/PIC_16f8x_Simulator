@@ -96,7 +96,7 @@ public class RootController implements Controlable, Initializable {
     }
 
     @FXML
-    public void handleTeam(){
+    public void handleTeam() {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Team");
@@ -106,13 +106,13 @@ public class RootController implements Controlable, Initializable {
         alert.showAndWait();
     }
 
-    private void openPdf(String filename){
+    private void openPdf(String filename) {
 
         if (Desktop.isDesktopSupported()) {
-            File file = new File(RootController.class.getResource("/pdf/"+filename).getFile());
+            File file = new File(RootController.class.getResource("/pdf/" + filename).getFile());
             if (!file.exists()) {
                 try {
-                    try (InputStream is = getClass().getResourceAsStream("./"+filename);
+                    try (InputStream is = getClass().getResourceAsStream("./" + filename);
                          OutputStream os = new FileOutputStream(file)) {
 
                         byte[] buffer = new byte[1024];

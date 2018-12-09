@@ -1,7 +1,6 @@
 package microController;
 
 import app.ControlsController;
-import memoryBank.MemoryBankController;
 import memoryBank.MemoryBankDataModel;
 import util.RegisterDataParser;
 import util.RowElement;
@@ -159,11 +158,11 @@ public class MicroControllerModel {
 
     private void checkTimer0() {
 
-        if(isPinInput()){
+        if (isPinInput()) {
 
-            if(didPinChange()){
+            if (didPinChange()) {
 
-                if(rightEdge()){
+                if (rightEdge()) {
 
                     ControlsController.getInstance().getMicroController().IncTimer0(1);
                 }

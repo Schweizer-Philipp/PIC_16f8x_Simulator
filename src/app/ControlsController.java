@@ -112,10 +112,10 @@ public class ControlsController {
 
         microChipController.getCommands().clear();
         microChipController.getCommands().addAll((Objects.requireNonNull(FileReader.getCommandLineModelList())));
-        if(logFileCommandsController != null){
+        if (logFileCommandsController != null) {
 
             List<String> list = microChipController.getCommands().stream().map(command -> command.toStringSmall()).collect(Collectors.toList());
-            list.add(list.size(),new CommandLineModel(0, CommandCode.NOP, -1, 0, "").toStringSmall());
+            list.add(list.size(), new CommandLineModel(0, CommandCode.NOP, -1, 0, "").toStringSmall());
             logFileCommandsController.setList(list);
         }
     }
@@ -123,7 +123,7 @@ public class ControlsController {
     public void setLogFileCommandsController(LogFileCommandsController logFileCommandsController) {
         this.logFileCommandsController = logFileCommandsController;
         List<String> list = microChipController.getCommands().stream().map(command -> command.toStringSmall()).collect(Collectors.toList());
-        list.add(list.size(),new CommandLineModel(0, CommandCode.NOP, -1, 0, "").toStringSmall());
+        list.add(list.size(), new CommandLineModel(0, CommandCode.NOP, -1, 0, "").toStringSmall());
         logFileCommandsController.setList(list);
     }
 

@@ -727,7 +727,7 @@ public class MicroChipController {
 
     public int getNextCommandAsInt() {
 
-        if(getCommands().get(programCounter).getCommandArg() == -1){
+        if (getCommands().get(programCounter).getCommandArg() == -1) {
 
             return -1;
         }
