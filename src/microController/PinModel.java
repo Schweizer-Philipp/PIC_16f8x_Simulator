@@ -20,9 +20,12 @@ public class PinModel {
 
     private SimpleBooleanProperty ioPinProperty;
 
+    private SimpleBooleanProperty isOutputProperty;
+
     private String IOPinName;
 
-    public PinModel(String name, int nr, boolean IOPin, String IOPinName) {
+    public PinModel(String name, int nr, boolean IOPin, String IOPinName, boolean isOutput) {
+        this.isOutputProperty = new SimpleBooleanProperty(isOutput);
         this.ioPinProperty = new SimpleBooleanProperty(IOPin);
         this.IOPinName = IOPinName;
         this.nameProperty = new SimpleStringProperty(name);
@@ -32,10 +35,6 @@ public class PinModel {
 
     public boolean isIOPin() {
         return ioPinProperty.get();
-    }
-
-    public String getIOPinName() {
-        return IOPinName;
     }
 
     public void toggle() {
@@ -77,6 +76,15 @@ public class PinModel {
 
     public boolean isOn() {
         return statusProperty.get();
+    }
+
+
+    public SimpleBooleanProperty isOutputProperty() {
+        return isOutputProperty;
+    }
+
+    public void setIsOutputProperty(boolean isOutputProperty) {
+        this.isOutputProperty.set(isOutputProperty);
     }
 
     @Override

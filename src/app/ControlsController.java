@@ -66,7 +66,7 @@ public class ControlsController {
                 wRegisterController.update("0x" + Integer.toHexString(microChipController.getRegisterW()), String.valueOf(microChipController.getCycle()));
                 System.out.println(microChipController.toString());
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(150);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

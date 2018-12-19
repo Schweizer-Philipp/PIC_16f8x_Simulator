@@ -40,40 +40,40 @@ public class MicroControllerModel {
 
                 {"RB1 <-->", "<--> RB6"}, {"RB2 <-->", "<--> RB5"}, {"RB3 <-->", "<--> RB4"},};
 
-        PinModel leftPin = new PinModel(pinNames[0][0], 1, true, "RA2");
-        PinModel rightPin = new PinModel(pinNames[0][1], 18, true, "RA1");
+        PinModel leftPin = new PinModel(pinNames[0][0], 1, true, "RA2",false);
+        PinModel rightPin = new PinModel(pinNames[0][1], 18, true, "RA1",false);
         pins.add(leftPin, rightPin);
 
-        leftPin = new PinModel(pinNames[1][0], 2, true, "RA3");
-        rightPin = new PinModel(pinNames[1][1], 17, true, "RA0");
+        leftPin = new PinModel(pinNames[1][0], 2, true, "RA3",false);
+        rightPin = new PinModel(pinNames[1][1], 17, true, "RA0",false);
         pins.add(leftPin, rightPin);
 
-        leftPin = new PinModel(pinNames[2][0], 3, true, "RA4");
-        rightPin = new PinModel(pinNames[2][1], 16, false, null);
+        leftPin = new PinModel(pinNames[2][0], 3, true, "RA4",false);
+        rightPin = new PinModel(pinNames[2][1], 16, false, null,false);
         pins.add(leftPin, rightPin);
 
-        leftPin = new PinModel(pinNames[3][0], 4, false, null);
-        rightPin = new PinModel(pinNames[3][1], 15, false, null);
+        leftPin = new PinModel(pinNames[3][0], 4, false, null,false);
+        rightPin = new PinModel(pinNames[3][1], 15, false, null,false);
         pins.add(leftPin, rightPin);
 
-        leftPin = new PinModel(pinNames[4][0], 5, false, null);
-        rightPin = new PinModel(pinNames[4][1], 14, false, null);
+        leftPin = new PinModel(pinNames[4][0], 5, false, null,false);
+        rightPin = new PinModel(pinNames[4][1], 14, false, null,false);
         pins.add(leftPin, rightPin);
 
-        leftPin = new PinModel(pinNames[5][0], 6, true, "RB0");
-        rightPin = new PinModel(pinNames[5][1], 13, true, "RB7");
+        leftPin = new PinModel(pinNames[5][0], 6, true, "RB0",false);
+        rightPin = new PinModel(pinNames[5][1], 13, true, "RB7",false);
         pins.add(leftPin, rightPin);
 
-        leftPin = new PinModel(pinNames[6][0], 7, true, "RB1");
-        rightPin = new PinModel(pinNames[6][1], 12, true, "RB6");
+        leftPin = new PinModel(pinNames[6][0], 7, true, "RB1",false);
+        rightPin = new PinModel(pinNames[6][1], 12, true, "RB6",false);
         pins.add(leftPin, rightPin);
 
-        leftPin = new PinModel(pinNames[7][0], 8, true, "RB2");
-        rightPin = new PinModel(pinNames[7][1], 11, true, "RB5");
+        leftPin = new PinModel(pinNames[7][0], 8, true, "RB2",false);
+        rightPin = new PinModel(pinNames[7][1], 11, true, "RB5",false);
         pins.add(leftPin, rightPin);
 
-        leftPin = new PinModel(pinNames[8][0], 9, true, "RB3");
-        rightPin = new PinModel(pinNames[8][1], 10, true, "RB4");
+        leftPin = new PinModel(pinNames[8][0], 9, true, "RB3",false);
+        rightPin = new PinModel(pinNames[8][1], 10, true, "RB4",false);
         pins.add(leftPin, rightPin);
 
     }
@@ -111,13 +111,13 @@ public class MicroControllerModel {
         //TRIS_A & PORT_A Register
         for (int i = 0; i < 5; i++) {
             PinModel model = getIOPin(i, "A");
-            model.setIoPinProperty(((tris_a >> i) & 0x1) == 1);
+            model.setIsOutputProperty(((tris_a >> i) & 0x1) == 1);
             model.setStatus(((port_a >> i) & 0x1) == 1);
         }
         //TRIS_B & PORT_B Register
         for (int i = 0; i < 8; i++) {
             PinModel model = getIOPin(i, "B");
-            model.setIoPinProperty(((tris_b >> i) & 0x1) == 1);
+            model.setIsOutputProperty(((tris_b >> i) & 0x1) == 1);
             model.setStatus(((port_b >> i) & 0x1) == 1);
         }
 
@@ -164,7 +164,7 @@ public class MicroControllerModel {
 
                 if (rightEdge()) {
 
-                    ControlsController.getInstance().getMicroController().IncTimer0(1);
+                    ControlsController.getInstance().getMicroController().IncTimer0(1,1);
                 }
             }
         }

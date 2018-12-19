@@ -24,6 +24,10 @@ public class MicroChipController {
 
     private static int FLAG_REGISTER_W = -1;
 
+    private int coldownTimer0 = 0;
+
+    private int coldownPCL = 0;
+
     private static int STATUS_REGISTER = 0x03;
 
     private ArrayList<CommandLineModel> commands;
@@ -73,10 +77,12 @@ public class MicroChipController {
         tos = new LinkedList<>();
         //setPCL();
         initialize();
+        ControlsController.getInstance().getMicroControllerModel().updateIOPins();
     }
 
     public void executeCommand(CommandLineModel command) {
 
+        //System.out.println(programCounter);
         int result;
         int twoCompliment;
         lastExecutedCommand = command;
@@ -89,6 +95,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true, false);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -99,6 +106,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true, false);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -107,6 +115,7 @@ public class MicroChipController {
                 setRegisterValue(0x00, command.getCommandArg(), getCurrentBank(), true);
                 checkZeroFlag(0);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -115,6 +124,7 @@ public class MicroChipController {
                 setRegisterValue(0x00, FLAG_REGISTER_W, null, true);
                 checkZeroFlag(0);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -124,6 +134,7 @@ public class MicroChipController {
                 checkZeroFlag(result);
                 safeValueInRegister(command, result, true, false);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -135,6 +146,7 @@ public class MicroChipController {
                 safeValueInRegister(command, result, true, false);
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -150,6 +162,7 @@ public class MicroChipController {
                 }
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
 
                 break;
@@ -162,6 +175,7 @@ public class MicroChipController {
                 safeValueInRegister(command, result, true, false);
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -177,6 +191,7 @@ public class MicroChipController {
                 }
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -187,6 +202,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true, false);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -197,6 +213,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true, false);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -212,6 +229,7 @@ public class MicroChipController {
                     }
                 }
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -221,6 +239,7 @@ public class MicroChipController {
                     commands.remove(programCounter);
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -238,6 +257,7 @@ public class MicroChipController {
                 safeValueInRegister(command, result, true, false);
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -255,6 +275,7 @@ public class MicroChipController {
                 safeValueInRegister(command, result, true, false);
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -267,6 +288,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true, false);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -278,6 +300,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, false, false);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
 
                 break;
@@ -289,6 +312,7 @@ public class MicroChipController {
 
                 safeValueInRegister(command, result, true, false);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -306,6 +330,7 @@ public class MicroChipController {
                 safeValueInRegister(command, result, false, true);
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
 
                 break;
@@ -324,6 +349,7 @@ public class MicroChipController {
                 safeValueInRegister(command, result, false, true);
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -336,8 +362,9 @@ public class MicroChipController {
                     commands.add(programCounter + 1, new CommandLineModel(0, CommandCode.NOP, -1, 0, ""));
                 }
 
-                programmcounterInc();
                 cycle++;
+                IncTimer0(0,1);
+                programmcounterInc();
                 break;
 
             case BTFSS:
@@ -350,6 +377,7 @@ public class MicroChipController {
                 }
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -358,6 +386,7 @@ public class MicroChipController {
                 result = add(registerW, command.getCommandArg());
                 setRegisterValue(result, FLAG_REGISTER_W, null, true);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -366,15 +395,17 @@ public class MicroChipController {
                 registerW = registerW & command.getCommandArg();
                 checkZeroFlag(registerW);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
             case CALL:
 
                 tos.push(programCounter + 1);
-                programCounter = ((getRegisterValue(10) & 0x18) << 8) + command.getCommandArg();
+                programCounter = (((getRegisterValue(10) & 0x18) << 8) + command.getCommandArg());
                 cycle = cycle + 2;
-                setPCL();
+                IncTimer0(0,2);
+                adjustPCL();
                 break;
 
             case CLRWDT:
@@ -388,7 +419,9 @@ public class MicroChipController {
 
                 programCounter = ((getRegisterValue(10) & 0x18) << 8) + command.getCommandArg();
                 cycle = cycle + 2;
-                setPCL();
+                IncTimer0(0,1);
+                IncTimer0(0,1);
+                adjustPCL();
                 break;
 
             case IORLW:
@@ -396,6 +429,7 @@ public class MicroChipController {
                 registerW = registerW | command.getCommandArg();
                 checkZeroFlag(registerW);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -404,13 +438,13 @@ public class MicroChipController {
                 registerW = command.getCommandArg();
                 checkZeroFlag(registerW);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
             case RETFIE:
 
                 cycle = cycle + 2;
-                programmcounterInc();
                 //TODO
                 break;
 
@@ -419,19 +453,22 @@ public class MicroChipController {
                 registerW = command.getCommandArg();
                 programCounter = tos.pop();
                 cycle = cycle + 2;
-                setPCL();
+                IncTimer0(0,2);
+                adjustPCL();
                 break;
 
             case RETURN:
 
                 programCounter = tos.pop();
                 cycle = cycle + 2;
-                setPCL();
+                IncTimer0(0,2);
+                adjustPCL();
                 break;
 
             case SLEEP:
 
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 //TODO
                 break;
@@ -447,6 +484,7 @@ public class MicroChipController {
 
                 setRegisterValue(result, FLAG_REGISTER_W, null, true);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -455,6 +493,7 @@ public class MicroChipController {
                 registerW = registerW ^ command.getCommandArg();
                 checkZeroFlag(registerW);
                 cycle++;
+                IncTimer0(0,1);
                 programmcounterInc();
                 break;
 
@@ -464,6 +503,12 @@ public class MicroChipController {
 
         }
 
+    }
+
+    private void adjustPCL() {
+
+        bankZero.getRegister()[2] = programCounter & 0xFF;
+        bankOne.getRegister()[2] = programCounter & 0xFF;
     }
 
     private void safeValueInRegister(CommandLineModel command, int result, boolean b, boolean noWRegister) {
@@ -485,34 +530,60 @@ public class MicroChipController {
 
     private void programmcounterInc() {
 
-        programCounter++;
-        setPCL();
-        IncTimer0(0);
+        if(coldownPCL==0){
+
+            programCounter = (programCounter+1) & 0xFF;
+            bankZero.getRegister()[2] = programCounter;
+            bankOne.getRegister()[2] = programCounter;
+        }
+        else{
+            coldownPCL--;
+        }
     }
 
-    public void IncTimer0(int source) {
+    public void IncTimer0(int source,int increment) {
 
-        int T0CS = bankOne.getRegister()[1] & 0x20 >> 5;
-        int PSA = bankOne.getRegister()[1] & 0xF >> 3;
-        int prescaler = 2 << ((bankOne.getRegister()[1] & 0x7));
+        /*System.out.println("Bevor:");
+        System.out.println("Timer0: "+bankZero.getRegister()[1]);
+        System.out.println("Coldown: "+coldownTimer0);
+        System.out.println("safedTimer: "+safedTimer0Impulsed);*/
 
-        if (T0CS == source) {
+        if(coldownTimer0 == 0){
 
-            safedTimer0Impulsed++;
+            int T0CS = (bankOne.getRegister()[1] & 0x20) >> 5;
+            int PSA = (bankOne.getRegister()[1] & 0xF) >> 3;
+            int prescaler = 2 << ((bankOne.getRegister()[1] & 0x7));
+            if (T0CS == source) {
 
-            if (PSA == 0) {
+                safedTimer0Impulsed +=increment;
 
-                if ((prescaler / safedTimer0Impulsed) == 0) {
+                if (PSA == 0) {
+
+                    if ((prescaler / (safedTimer0Impulsed*1.0)) <=1) {
+
+                        setUpTimer0();
+                        safedTimer0Impulsed = 0;
+                    }
+                } else {
 
                     safedTimer0Impulsed = 0;
+                    setUpTimer0();
                 }
-                setUpTimer0();
-            } else {
-
-                safedTimer0Impulsed = 0;
-                setUpTimer0();
             }
         }
+        else{
+
+            coldownTimer0--;
+        }
+
+        /*System.out.println("After:");
+        System.out.println("Timer0: "+bankZero.getRegister()[1]);
+        System.out.println("Coldown: "+coldownTimer0);
+        System.out.println("safedTimer: "+safedTimer0Impulsed);*/
+
+       /* System.out.println("Coldown: "+coldownTimer0);
+        System.out.println("safedImpulsed: "+safedTimer0Impulsed);
+        */
     }
 
     private void setUpTimer0() {
@@ -623,20 +694,28 @@ public class MicroChipController {
                         value = value & 0xE7;
                         bank.getRegister()[register] = bank.getRegister()[register] & 0x18;
                         bank.getRegister()[register] = bank.getRegister()[register] + value;
-
                     }
 
                 } else if (register == 2) {
 
+                    bank.getRegister()[register] = value + 1;
+                    programCounter = (getRegisterValue(10) << 8) + value + 1;
+                    coldownPCL = 1;
+
+                } else if(register == 1 && getCurrentBank().equals(bankZero)){
+
+                    safedTimer0Impulsed = 0;
+                    coldownTimer0 = 2;
                     bank.getRegister()[register] = value;
-                    programCounter = (getRegisterValue(10) << 8) + getRegisterValue(2);
+
                 } else {
 
+                    bank.getRegister()[register] = value;
                     if (register == 5 || register == 6) {
 
                         ControlsController.getInstance().getMicroControllerModel().updateIOPins();
                     }
-                    bank.getRegister()[register] = value;
+
                 }
             }
         }

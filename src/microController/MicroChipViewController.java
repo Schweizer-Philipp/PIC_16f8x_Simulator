@@ -128,7 +128,7 @@ public class MicroChipViewController implements Controlable, Initializable {
             model.updatePortRegister();
         });
         //disable Pins
-        labelPin.disableProperty().bind(pin.ioPinProperty().not());
+        labelPin.disableProperty().bind(pin.isOutputProperty().not());
 
         HBox.setHgrow(labelName, Priority.NEVER);
 

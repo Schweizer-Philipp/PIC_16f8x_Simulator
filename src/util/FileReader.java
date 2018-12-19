@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class FileReader {
 
-    private static StringProperty currentFile = new SimpleStringProperty(FileReader.class.getResource("/test/TPicSim4.LST").getFile());
+    private static StringProperty currentFile = new SimpleStringProperty(FileReader.class.getResource("/test/TPicSim101.LST").getFile());
 
     public static List<CommandLineModel> getCommandLineModelList() {
 
