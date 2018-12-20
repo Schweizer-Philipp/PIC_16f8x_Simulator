@@ -96,6 +96,12 @@ public class RootController implements Controlable, Initializable {
     }
 
     @FXML
+    public void handleProgrammanual() {
+
+        openPdf("RA_ProgrammAnleitung.pdf");
+    }
+
+    @FXML
     public void handleTeam() {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -24,6 +24,9 @@
                     <items>
                         <MenuItem mnemonicParsing="false" text="ManualPIC16F8X " onAction="#handleDatasheet"/>
                     </items>
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Programmanual " onAction="#handleProgrammanual"/>
+                    </items>
                 </Menu>
             </menus>
         </MenuBar>
